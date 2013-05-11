@@ -20,6 +20,11 @@ class WeThePeople_Plugin {
   protected $api_endpoint;
 
   /**
+   * @var int $transient_expires The amount of time (in seconds) transient data should live before it's purged
+   */
+  protected $transient_expires;
+
+  /**
    * Class constructor
    * @uses add_shortcode()
    * @since 1.0
@@ -27,6 +32,7 @@ class WeThePeople_Plugin {
   public function __construct() {
     // Set class properties
     $this->api_endpoint = 'https://api.whitehouse.gov/v1/petitions/';
+    $this->transient_expires = 60;
 
     // Register our shortcode
     add_shortcode( 'petition', array( &$this, 'petition_shortcode' ) );
@@ -101,7 +107,15 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   protected function make_api_call( $call ) {
-    $response = wp_remote_get( sprintf( '%s%s.json', $this->api_endpoint, $call ) );
+    $request_uri = sprintf( '%s%s.json', $this->api_endpoint, $call );
+
+    // If we have matching transient data return that instead
+    if ( $data = get_transient( $request_uri ) ) {
+      return $data;
+    }
+
+    // If we're still in at this point then we need to actually make an API call
+    $response = wp_remote_get( $request_uri );
 
     if ( is_wp_error( $response ) ) {
         $this->error( $response->get_error_message() );
@@ -110,6 +124,10 @@ class WeThePeople_Plugin {
         $response['response']['code'], $response['response']['message']
       ) );
     }
+
+    // Save this as transient data
+    set_transient( $request_uri, $response['body'], $this->transient_expires );
+
     return json_decode( $response['body'], false );
   }
 
