@@ -1,3 +1,5 @@
+![We The People](assets/banner-772x250.png)
+
 # We The People WordPress Plugin
 
 Easily embed White House petitions from We The People into your WordPress site via shortcodes.
