@@ -15,3 +15,7 @@ Easily embed White House petitions from We The People into your WordPress site v
 ### 2.0
 
 * Once the write API becomes available make it easy for visitors to sign a petition
+
+## Special Thanks
+
+* [Tony Todoroff](http://www.georgetodoroff.com/) for the WordPress.org banners
