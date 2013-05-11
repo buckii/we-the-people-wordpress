@@ -15,14 +15,14 @@
 class WeThePeople_Plugin {
 
   /**
-   * @var str $api_endpoint The API endpoint (with trailing slash) for all API requests
+   * The API endpoint (with trailing slash) for all API requests
    */
-  protected $api_endpoint;
+  const API_ENDPOINT = 'https://api.whitehouse.gov/v1/petitions/';
 
   /**
-   * @var int $transient_expires The amount of time (in seconds) transient data should live before it's purged
+   * The amount of time (in seconds) transient data should live before it's purged
    */
-  protected $transient_expires;
+  const TRANSIENT_EXPIRES = 60;
 
   /**
    * Class constructor
@@ -30,10 +30,6 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   public function __construct() {
-    // Set class properties
-    $this->api_endpoint = 'https://api.whitehouse.gov/v1/petitions/';
-    $this->transient_expires = 60;
-
     // Register our shortcode
     add_shortcode( 'petition', array( &$this, 'petition_shortcode' ) );
   }
@@ -55,35 +51,32 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Log an error
-   * @param str $message The error message to log
-   * @return void
-   * @since 1.0
-   */
-  public function error( $message ) {
-    trigger_error( sprintf( 'WeThePeople: %s', $message ), E_USER_NOTICE );
-  }
-
-  /**
    * Handler for the [petition] shortcode
    * @param array $atts Attributes passed in the shortcode call
    * @param str $content Content to be added above the petition information
    * @return str
    * @uses shortcode_atts()
    * @since 1.0
+   *
+   * @todo Load a template rather than just spitting out a print_r()
    */
   public function petition_shortcode( $atts, $content='' ) {
     $defaults = array(
       'id' => false
     );
     $atts = shortcode_atts( $defaults, $atts );
-
-    if ( $atts['id'] ) {
-      $response = $this->api( 'retrieve', $atts );
-    } else {
+    if ( ! $atts['id'] ) {
       $this->error( __( 'Invalid petition ID', 'we-the-people' ) );
+      return;
     }
-    return print_r( $response, true );
+
+    $response = $this->api( 'retrieve', $atts );
+    if ( empty( $response ) ) {
+      $this->error( sprintf( __( 'API response for petition %s came back empty', 'we-the-people' ), $atts['id'] ) );
+      return;
+    }
+
+    return print_r( current( $response ), true );
   }
 
   /**
@@ -99,6 +92,18 @@ class WeThePeople_Plugin {
   }
 
   /**
+   * Log an error
+   * @param str $message The error message to log
+   * @return void
+   * @since 1.0
+   *
+   * @todo Write some better error reporting
+   */
+  protected function error( $message ) {
+    trigger_error( sprintf( 'WeThePeople: %s', $message ), E_USER_NOTICE );
+  }
+
+  /**
    * Make the actual call to the API endpoint and return the results as a PHP object
    * @param str $call The assembled API call
    * @return object
@@ -107,10 +112,11 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   protected function make_api_call( $call ) {
-    $request_uri = sprintf( '%s%s.json', $this->api_endpoint, $call );
+    $request_uri = sprintf( '%s%s.json', self::API_ENDPOINT, $call );
+    $hash = md5( $request_uri ); // Transient keys should be < 45 chars
 
     // If we have matching transient data return that instead
-    if ( $data = get_transient( $request_uri ) ) {
+    if ( $data = get_transient( $hash ) ) {
       return $data;
     }
 
@@ -125,10 +131,11 @@ class WeThePeople_Plugin {
       ) );
     }
 
-    // Save this as transient data
-    set_transient( $request_uri, $response['body'], $this->transient_expires );
+    // Save the response body as a transient
+    $body = json_decode( $response['body'], false );
+    set_transient( $hash, $body->results, self::TRANSIENT_EXPIRES );
 
-    return json_decode( $response['body'], false );
+    return $body->results;
   }
 
 }
@@ -137,6 +144,7 @@ class WeThePeople_Plugin {
  * Create an instance of WeThePeople_Plugin and store it in the global $we_the_people
  * @global $we_the_people
  * @return bool
+ * @since 1.0
  */
 function wethepeople_init() {
   global $we_the_people;
