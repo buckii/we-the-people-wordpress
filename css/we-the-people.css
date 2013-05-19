@@ -1,0 +1,16 @@
+/**
+ * Styles for the We The People plugin
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+
+.wtp-petition { }
+.wtp-petition h2, .wtp-petition .petition-status { font-family: Georgia,"Times New Roman",Times,serif; color: #737373; }
+.wtp-petition h2 { font-size: 1.6em; }
+.wtp-petition .petition-status { font-size: 1.1em; font-weight: bold; }
+.wtp-petition blockquote .extended { display: none; }
+
+@media print {
+
+}
