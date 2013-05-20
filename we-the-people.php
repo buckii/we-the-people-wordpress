@@ -41,6 +41,23 @@ class WeThePeople_Plugin {
     // Regsiter/enqueue scripts and styles
     $this->register_scripts();
     $this->register_styles();
+
+    // Register our TinyMCE button
+    if ( ( current_user_can('edit_posts') || current_user_can('edit_pages') ) && get_user_option( 'rich_editing' ) ) {
+      add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_plugin' ) );
+      add_filter( 'mce_buttons_2', array( $this, 'add_tinymce_buttons' ) );
+    }
+  }
+
+  /**
+   * Add the Petition button to TinyMCE
+   * @param array $buttons The TinyMCE buttons
+   * @return array
+   * @since 1.0
+   */
+  public function add_tinymce_buttons( $buttons ) {
+    array_push( $buttons, 'separator', 'wethepeople' );
+    return $buttons;
   }
 
   /**
@@ -128,6 +145,16 @@ class WeThePeople_Plugin {
       return;
     }
     return $this->display_petition( current( $response ), false );
+  }
+
+  /**
+   * Register our TinyMCE plugin
+   * @param array $plugins Plugins registered within TinyMCE
+   * @return array
+   */
+  public function register_tinymce_plugin( $plugins ) {
+    $plugins['wethepeople'] = plugins_url( 'js/tinymce/petition.js?' . time(), __FILE__ );
+    return $plugins;
   }
 
   /**
