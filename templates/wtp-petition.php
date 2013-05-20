@@ -17,7 +17,7 @@ add_filter( 'wethepeople_petition_body', 'wptexturize' );
   <h2 class="petition-title"><?php echo $petition->title; ?></h2>
   <blockquote class="collapsed"><?php echo apply_filters( 'wethepeople_petition_body', $petition->body ); ?></blockquote>
 
-<?php if ( ! $petition->status == 'responded' ) : ?>
+<?php if ( $petition->status == 'responded' ) : ?>
 
   <p class="responded">
     <a href="<?php echo $petition->response->url; ?>" title="<?php esc_attr( __( "Read the White House's response to this petition", 'we-the-people' ) ); ?>" rel="external">
