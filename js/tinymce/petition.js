@@ -4,11 +4,22 @@
  * @package We The People
  * @author Buckeye Interactive
  */
+/* jslint browser: true, white: true */
+/* global tinymce: true */
 
 ( function () {
-  tinymce.create('tinymce.plugins.wethepeople', {
-    init : function( ed, url ) {
+  "use strict";
 
+  tinymce.create( 'tinymce.plugins.wethepeople', {
+
+    /**
+     * Initialize the TinyMCE plugin
+     * @param object ed The TinyMCE editor instance
+     * @param str url The URL of this directory
+     * @return void
+     */
+    init : function( ed, url ) {
+      // Register our weThePeopleDialog command (which we'll trigger with the button later)
       ed.addCommand( 'weThePeopleDialog', function () {
         ed.windowManager.open({
           file: url + '/petition.php',
@@ -18,6 +29,7 @@
         });
       });
 
+      // Add the button to TinyMCE
       ed.addButton( 'wethepeople', {
         cmd: 'weThePeopleDialog',
         title : 'We The People Petition',
@@ -27,6 +39,7 @@
 
     /**
      * Set the plugin information
+     * @return object
      * @todo Put the plugin URL in place for infourl
      */
     getInfo : function() {
@@ -41,5 +54,6 @@
 
   });
 
+  // Instantiate our TinyMCE plugin
   tinymce.PluginManager.add( 'wethepeople', tinymce.plugins.wethepeople );
-})();
+}());
