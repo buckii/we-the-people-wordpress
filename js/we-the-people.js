@@ -4,6 +4,8 @@
  * @package We The People
  * @author Buckeye Interactive
  */
+/* jslint browser: true, white: true */
+/* global jQuery: true, WeThePeople: true */
 
 jQuery( function ( $ ) {
   "use strict";
@@ -13,8 +15,10 @@ jQuery( function ( $ ) {
    */
   $('body').find( '.wtp-petition blockquote' ).each( function () {
     var self = $(this);
-    self.find( 'p:not(:first)' ).wrapAll( '<div class="extended" />' );
-    self.append( '<a href="#" class="toggle more" role="button">' + WeThePeople.i18n.more + '</a>' ).addClass( 'collapsed' );
+    if ( self.find( 'p' ).length > 1 ) {
+      self.find( 'p:not(:first)' ).wrapAll( '<div class="extended" />' );
+      self.append( '<a href="#" class="toggle more" role="button">' + WeThePeople.i18n.more + '</a>' ).addClass( 'collapsed' );
+    }
   });
 
   /**
