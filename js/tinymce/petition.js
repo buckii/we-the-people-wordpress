@@ -32,8 +32,8 @@
       // Add the button to TinyMCE
       ed.addButton( 'wethepeople', {
         cmd: 'weThePeopleDialog',
-        title : 'We The People Petition',
-        image : url + '/img/tinymce-icon.png'
+        title : 'Insert We The People petition',
+        image : url + '/insert-petition.png'
       });
     },
 

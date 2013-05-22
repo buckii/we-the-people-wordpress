@@ -27,74 +27,7 @@ if ( file_exists( $config ) ) {
 <script type="text/javascript" src="<?php echo includes_url( '/js/jquery/jquery.js' ); ?>"></script>
 <script language="javascript" type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
 <style type="text/css" src="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>"></style>
-<style type="text/css">
-
-body {
-  min-width: 0;
-}
-
-#tabs {
-  padding: 15px 15px 3px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #dfdfdf;
-  margin: 0;
-}
-#tabs li {
-  display: inline;
-}
-#tabs a.current {
-  background-color: #fff;
-  border-color: #dfdfdf;
-  border-bottom-color: #fff;
-  color: #d54e21;
-}
-#tabs a {
-  color: #2583AD;
-  padding: 6px;
-  border-width: 1px 1px 0;
-  border-style: solid solid none;
-  border-color: #f1f1f1;
-  text-decoration: none;
-}
-#tabs a:hover {
-  color: #d54e21;
-}
-.wrap h2 {
-  border-bottom-color: #dfdfdf;
-  color: #555;
-  margin: 5px 0;
-  padding: 0;
-  font-size: 18px;
-}
-#user_info {
-  right: 5%;
-  top: 5px;
-}
-h3 {
-  font-size: 1.1em;
-  margin-top: 10px;
-  margin-bottom: 0px;
-}
-.tab {
-  margin: 0;
-  padding: 5px 20px 10px;
-  background-color: #fff;
-  border-left: 1px solid #dfdfdf;
-  border-bottom: 1px solid #dfdfdf;
-}
-* html {
-      overflow-x: hidden;
-      overflow-y: scroll;
-  }
-#flipper div p {
-  margin-top: 0.4em;
-  margin-bottom: 0.8em;
-  text-align: justify;
-}
-
-
-
-</style>
+<link href="petition.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 
 </head>
 
@@ -115,19 +48,42 @@ h3 {
         <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
         <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
         <input name="petition-search-form" id="petition-search-form" type="text" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc', 'we-the-people' ) ); ?>" />
+        <div id="search-results"></div>
       </div><!-- #tab-basic -->
 
       <div id="tab-advanced" class="tab">
         <h3><?php _e( 'Advanced settings', 'we-the-people' ); ?></h3>
         <textarea name="petition-intro" id="petition-intro" rows="4" cols="40"></textarea>
       </div><!-- #tab-advanced -->
-    </div><!-- #flipper -->
+    </div><!-- .wrap.tabbed -->
 
-    <input id="insert" type="submit" class="button-primary" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
-    <input name="cancel" id="cancel" type="button" value="<?php echo esc_attr( __( 'Cancel', 'we-the-people' ) ); ?>" onclick="tinyMCEPopup.close();" />
+    <div class="mceActionPanel">
+      <input id="insert" type="submit" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
+      <input name="cancel" id="cancel" type="button" value="<?php echo esc_attr( __( 'Cancel', 'we-the-people' ) ); ?>" onclick="tinyMCEPopup.close();" />
+    </div><!-- .mceActionPanel -->
   </form>
 
 <script type="text/javascript">
+  /**
+   * @todo Refactor this
+   */
+
+  var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+
+  function wethepeople_petition_search() {
+    "use strict";
+    var $ = jQuery,
+    data = {
+      action: 'wtp_petition_search',
+      format: 'ul',
+      term: $('#petition-search-form').val()
+    };
+
+    $.post( ajaxurl, data, function ( response ) {
+      $('#search-results').html( response );
+    });
+    return;
+  }
 
   function wethepeople_init() {
     "use strict";
@@ -147,6 +103,21 @@ h3 {
       self.addClass( 'current' );
       tabbedArea.find( '.tab:visible' ).hide();
       $( self.attr( 'href' ) ).show();
+      return false;
+    });
+
+    /* Petition search */
+    $('#petition-search-form').on( 'keyup', function () {
+      var self = $(this);
+      if ( self.val().length >= 3 ) {
+        wethepeople_petition_search();
+      }
+      return true;
+    });
+
+    $('#search-results').on( 'click', 'a', function ( e ) {
+      e.preventDefault();
+      $('#petition-id').val( $(this).data( 'petition-id' ) );
       return false;
     });
   }
@@ -185,6 +156,7 @@ h3 {
 
   // This will let us actually use jQuery event listeners
   tinyMCEPopup.executeOnLoad( 'wethepeople_init()' );
+  wethepeople_init();
 
 </script>
 </body>

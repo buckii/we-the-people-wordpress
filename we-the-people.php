@@ -17,7 +17,7 @@ class WeThePeople_Plugin {
   /**
    * The API endpoint (with trailing slash) for all API requests
    */
-  const API_ENDPOINT = 'https://api.whitehouse.gov/v1/petitions/';
+  const API_ENDPOINT = 'https://api.whitehouse.gov/v1/';
 
   /**
    * The current plugin version
@@ -47,6 +47,9 @@ class WeThePeople_Plugin {
       add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_plugin' ) );
       add_filter( 'mce_buttons_2', array( $this, 'add_tinymce_buttons' ) );
     }
+
+    // Ajax hooks
+    add_action( 'wp_ajax_wtp_petition_search', array( &$this, 'tinymce_petition_search' ) );
   }
 
   /**
@@ -103,7 +106,7 @@ class WeThePeople_Plugin {
       sprintf( 'wtp-petition-%d.php', $petition->id ),
       'wtp-petition.php'
     );
-    if ( ! $template_file = locate_template( $templates, false ) ) {
+    if ( ! $template_file = locate_template( $templates, false, false ) ) {
       $template_file = dirname( __FILE__ ) . '/templates/wtp-petition.php';
     }
 
@@ -158,15 +161,53 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Handle requests for the API retrieve action
+   * Ajax handler for a petition search
+   * @return void
+   */
+  public function tinymce_petition_search() {
+    $args = array();
+    if ( isset( $_POST['term'] ) && $_POST['term'] ) {
+      $args['title'] = $_POST['term'];
+    }
+    $response =  $this->api( 'index', $args );
+
+    switch ( $_POST['format'] ) {
+      case 'ul':
+        echo '<ul>';
+        foreach ( $response as $petition ) {
+          printf( '<li><a href="%s" data-petition-id="%s">%s</a> <span class="signature-count">%s</span></li>',
+            $petition->url, $petition->id, $petition->title, sprintf( __( '%d signatures', 'we-the-people' ), $petition->signatureCount )
+          );
+        }
+        echo '</ul>';
+        break;
+
+      default:
+        echo json_encode( $response );
+        break;
+    }
+    die();
+  }
+
+  /**
+   * Handle requests for the API index action
    * @param array $args Arguments to pass to the API call
+   * @return object
+   * @since 1.0
+   */
+  protected function api_index_action( $args=array() ) {
+    return $this->make_api_call( sprintf( 'petitions.json?%s', http_build_query( $args ) ) );
+  }
+
+  /**
+   * Handle requests for the API retrieve action
    * @param array $args Arguments to pass to the API call
    * @return object
    * @since 1.0
    */
   protected function api_retrieve_action( $args=array() ) {
     $id = ( isset( $args['id'] ) ? $args['id'] : null );
-    return $this->make_api_call( $id );
+    return $this->make_api_call( sprintf( 'petitions/%s.json', $id ) );
   }
 
   /**
@@ -190,7 +231,7 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   protected function make_api_call( $call ) {
-    $request_uri = sprintf( '%s%s.json', self::API_ENDPOINT, $call );
+    $request_uri = self::API_ENDPOINT . $call;
     $hash = md5( $request_uri ); // Transient keys should be < 45 chars
 
     // If we have matching transient data return that instead
