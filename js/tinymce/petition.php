@@ -28,19 +28,21 @@ if ( file_exists( $config ) ) {
 <script language="javascript" type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
 <style type="text/css" src="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>"></style>
 <link href="petition.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
-
+<style type="text/css">
+  #petition-search-form.loading { background: url('<?php echo includes_url( 'images/wpspin.gif' ); ?>') right center no-repeat; }
+</style>
 </head>
 
 <body id="wtp-petition" class="wp-core-ui">
   <form id="wtp-insert-petition" action="?" onsubmit="javascript:wethepeople.insert();">
-    <h2><?php _e( 'Insert a petition', 'we-the-people' ); ?></h2>
-    <ul id="tabs">
+    <h3><?php _e( 'Insert a petition', 'we-the-people' ); ?></h3>
+    <?php /*<ul id="tabs">
       <li><a href="#tab-basic" accesskey="1" class="current"><?php _e( 'Basic', 'we-the-people' ); ?></a></li>
       <li><a href="#tab-advanced" accesskey="2"><?php _e( 'Advanced', 'we-the-people' ); ?></a></li>
-    </ul>
-    <div class="wrap tabbed">
+    </ul>*/ ?>
+    <div class="wrap">
       <div id="tab-basic" class="tab">
-        <h3><?php _e( 'Select your petition', 'we-the-people' ); ?></h3>
+        <?php /*<h3><?php _e( 'Select your petition', 'we-the-people' ); ?></h3>*/ ?>
 
         <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
         <input name="petition-id" id="petition-id" type="text" />
@@ -51,10 +53,12 @@ if ( file_exists( $config ) ) {
         <div id="search-results"></div>
       </div><!-- #tab-basic -->
 
-      <div id="tab-advanced" class="tab">
+      <?php /*<div id="tab-advanced" class="tab">
         <h3><?php _e( 'Advanced settings', 'we-the-people' ); ?></h3>
+
+        <label for="petition-intro"><?php _e( 'Preamble', 'we-the-people' ); ?></label>
         <textarea name="petition-intro" id="petition-intro" rows="4" cols="40"></textarea>
-      </div><!-- #tab-advanced -->
+      </div><!-- #tab-advanced -->*/ ?>
     </div><!-- .wrap.tabbed -->
 
     <div class="mceActionPanel">
@@ -67,7 +71,6 @@ if ( file_exists( $config ) ) {
   /**
    * @todo Refactor this
    */
-
   var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 
   function wethepeople_petition_search() {
@@ -81,6 +84,7 @@ if ( file_exists( $config ) ) {
 
     $.post( ajaxurl, data, function ( response ) {
       $('#search-results').html( response );
+      $('#petition-search-form').removeClass( 'loading' );
     });
     return;
   }
@@ -110,6 +114,7 @@ if ( file_exists( $config ) ) {
     $('#petition-search-form').on( 'keyup', function () {
       var self = $(this);
       if ( self.val().length >= 3 ) {
+        self.addClass( 'loading' );
         wethepeople_petition_search();
       }
       return true;

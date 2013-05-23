@@ -23,8 +23,8 @@
       ed.addCommand( 'weThePeopleDialog', function () {
         ed.windowManager.open({
           file: url + '/petition.php',
-          width: 600,
-          height: 500,
+          width: 500,
+          height: 430,
           inline: true
         });
       });
