@@ -7,13 +7,9 @@ Easily embed White House petitions from We The People into your WordPress site v
 
 ### Shortcodes
 
-`[petition id="123"]` or `[petition id="123"]Lorem ipsum sit dolor[/petition]`
+The simplest way to get started is through WordPress shortcodes. The syntax is as easy as: `[petition id="123"]`.
 
-#### Shortcode attributes
-
-* `id` (str, required) The We The People petition ID
-
-* `cta` (int) Show the "Sign this petition" call-to-action? (1 = show, 0 = hide)
+Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the ["Insert We The People Petition" button](js/tinymce/insert-petition.png) will open an overlay that will let you search the We The People petitions by title to find your issue.
 
 ### Widget
 
@@ -98,16 +94,21 @@ The We The People stylesheet and JavaScript file are enqueued in typical WordPre
       wp_dequeue_style( 'we-the-people' );
     }
     add_action( 'init', 'mytheme_disable_wtp_scripts_styles' );
+    
+### Can visitors sign a petition using the plugin?
+
+At this time the We The People API is read-only, meaning your readers would need to visit https://petitions.whitehouse.gov in order to sign a petition. The White House plans to release a write API sometime in the near future at which point this plugin will be upgraded to enable this capability.
 
 ## Roadmap/To-do
 
 ### Version 1.0
 
 * A flexible templating system
-* Better error handling
 * Documentation (this doc + WordPress.org README)
 * ~~An intuitive way to add shortcodes to the WordPress editor~~
 * ~~Caching via the [WordPress Transients API](http://codex.wordpress.org/Transients_API)~~
+* Longer-term caching to compensate for a shaky API
+* A filter that allows users to change the shortcode name in case of conflicts
 
 ### Version 2.0
 
