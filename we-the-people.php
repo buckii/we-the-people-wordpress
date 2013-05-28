@@ -38,6 +38,11 @@ class WeThePeople_Plugin {
   const TRANSIENT_LT_EXPIRES = 3600;
 
   /**
+   * @var str $shortcode_name The name of the shortcode to register (defaults to 'wtp-petition')
+   */
+  public $shortcode_name;
+
+  /**
    * Class constructor
    * @return void
    * @uses add_action()
@@ -47,7 +52,8 @@ class WeThePeople_Plugin {
    */
   public function __construct() {
     // Register our shortcode
-    add_shortcode( 'petition', array( &$this, 'petition_shortcode' ) );
+    $this->shortcode_name = apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' );
+    add_shortcode( $this->shortcode_name, array( &$this, 'petition_shortcode' ) );
 
     // Register/enqueue scripts and styles
     $this->register_scripts();

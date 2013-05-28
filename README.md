@@ -71,12 +71,35 @@ This filter is run on the actual body of the We The People petition before displ
 
 String (a modified version of `$content`).
 
-###### Example:
+###### Example
 
     function insert_preamble( $content ) {
       return '<p class="preamble">We petition the Obama Administration to&hellip;</p>' . $content;
     }
     add_filter( 'wethepeople_petition_body', 'insert_preamble' );
+
+##### `wethepeople_shortcode_name`
+
+The plugin has intentionally avoided a `[petition]` shortcode in favor of `[wtp-shortcode]` to reduce the risk of conflicting with other `[petition]` shortcodes that may be registered in another plugin or theme. Returning a string at this filter will allow you to override the default shortcode name of `wtp-petition`.
+
+###### Arguments
+
+*none*
+
+###### Return value
+
+String (the desired shortcode name)
+
+###### Example
+
+    /**
+     * Change the [wtp-petition] shortcode to something easier to remember like [petition]
+     * @return str
+     */
+    function change_wtp_petition_shortcode_name() {
+      return 'petition';
+    }
+    add_filter( 'wethepeople_shortcode_name', 'change_wtp_petition_shortcode_name' );
 
 ## Frequently Asked Questions
 

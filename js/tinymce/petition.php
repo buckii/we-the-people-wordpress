@@ -6,8 +6,6 @@
  * @author Buckeye Interactive
  *
  * @todo Load scripts + styles via wp_head()
- * @todo Advanced settings
- * @todo Search the We The People petitions to find an ID
  */
 
 // Attempt to load the WordPress environment by parsing our current URL to get to the root
@@ -134,11 +132,10 @@ if ( file_exists( $config ) ) {
       tinyMCEPopup.resizeToInnerSize();
     },
     insert: function insertPetition() {
-      var content = jQuery( '#petition-intro' ).val(),
-      shortcode_atts = {
+      var shortcode_atts = {
         id: jQuery( '#petition-id' ).val()
       },
-      shortcode = '[petition',
+      shortcode = '[<?php echo apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' ); ?>',
       prop;
 
       // Iterate through our shortcode attributes
@@ -147,9 +144,7 @@ if ( file_exists( $config ) ) {
           shortcode += ' ' + prop + '="' + shortcode_atts[ prop ] + '"';
         }
       }
-
-      // The presence of #petition-intro content will determine how we close this
-      shortcode += ']' + ( content ? content + '[/petition]' : '' );
+      shortcode += ']';
 
       tinyMCEPopup.execCommand( 'mceReplaceContent', false, shortcode );
       tinyMCEPopup.close();
