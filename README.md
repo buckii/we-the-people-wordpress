@@ -122,6 +122,12 @@ The We The People stylesheet and JavaScript file are enqueued in typical WordPre
 
 At this time the We The People API is read-only, meaning your readers would need to visit https://petitions.whitehouse.gov in order to sign a petition. The White House plans to release a write API sometime in the near future at which point this plugin will be upgraded to enable this capability.
 
+## Changelog
+
+### Version 1.0
+
+* First public release of the plugin, coordinated with the National Day of Civic Hacking at the White House on June 1, 2013.
+
 ## Roadmap/To-do
 
 ### Version 1.0
