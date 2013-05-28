@@ -10,8 +10,9 @@
 add_filter( 'wethepeople_petition_body', 'wpautop' );
 add_filter( 'wethepeople_petition_body', 'wptexturize' );
 
+// Uncomment the following line if you want to see the petition object during development
+//printf( '<pre>%s</pre>', print_r( $petition, true ) );
 ?>
-<pre><?php print_r( $petition ); ?></pre>
 
 <div id="wtp-petition-<?php echo $petition->id; ?>" class="wtp-petition">
   <h2 class="petition-title"><?php echo $petition->title; ?></h2>
