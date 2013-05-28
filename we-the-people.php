@@ -33,6 +33,11 @@ class WeThePeople_Plugin {
   const TRANSIENT_EXPIRES = 60;
 
   /**
+   * The amount of time (in seconds) the long-term transient should live before it's purged
+   */
+  const TRANSIENT_LT_EXPIRES = 3600;
+
+  /**
    * Class constructor
    * @return void
    * @uses add_action()
@@ -239,6 +244,12 @@ class WeThePeople_Plugin {
 
   /**
    * Make the actual call to the API endpoint and return the results as a PHP object
+   *
+   * This method uses the WordPress Transient API to save API responses for TRANSIENT_EXPIRES in the database.
+   * During development the API was somewhat flaky. In order to prevent an error we're also keeping a long-term
+   * transient in the database with a higher expiration time (TRANSIENT_LT_EXPIRES). It's probably better to have
+   * data that's up to 1hr out-of-date rather than nothing at all.
+   *
    * @param str $call The assembled API call
    * @return object
    * @uses get_transient()
@@ -251,19 +262,27 @@ class WeThePeople_Plugin {
   protected function make_api_call( $call ) {
     $request_uri = trailingslashit( self::API_ENDPOINT ) . $call;
     $hash = md5( $request_uri ); // Transient keys should be < 45 chars
+    $lt_hash = 'lt-' . $hash;
 
-    // If we have matching transient data return that instead
+    // If we have a matching [short-term] transient return that instead
     if ( $data = get_transient( $hash ) ) {
       return $data;
     }
 
     // If we're still in at this point then we need to actually make an API call
     $response = wp_remote_get( $request_uri );
-
     if ( is_wp_error( $response ) ) {
+
+      // An error? Maybe we still have some data in a long-term transient
+      if ( $data = get_transient( $lt_hash ) ) {
+        return $data;
+      }
+
+      // No long-term transients
       $this->error( $response->get_error_message() );
       return;
 
+    // It wasn't a WP_Error but the response doesn't look right...
     } elseif ( isset( $response['response']['code'] ) && $response['response']['code'] != 200 ) {
       $this->error( sprintf( __( 'API endpoint returned an unexpected status code of "%s: %s"', 'we-the-people' ),
         $response['response']['code'], $response['response']['message']
@@ -273,7 +292,7 @@ class WeThePeople_Plugin {
     // Save the response body as a transient
     $body = json_decode( $response['body'], false );
     set_transient( $hash, $body->results, self::TRANSIENT_EXPIRES );
-
+    set_transient( $lt_hash, $body->results, self::TRANSIENT_LT_EXPIRES );
     return $body->results;
   }
 

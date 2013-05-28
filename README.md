@@ -94,7 +94,7 @@ The We The People stylesheet and JavaScript file are enqueued in typical WordPre
       wp_dequeue_style( 'we-the-people' );
     }
     add_action( 'init', 'mytheme_disable_wtp_scripts_styles' );
-    
+
 ### Can visitors sign a petition using the plugin?
 
 At this time the We The People API is read-only, meaning your readers would need to visit https://petitions.whitehouse.gov in order to sign a petition. The White House plans to release a write API sometime in the near future at which point this plugin will be upgraded to enable this capability.
@@ -107,7 +107,7 @@ At this time the We The People API is read-only, meaning your readers would need
 * Documentation (this doc + WordPress.org README)
 * ~~An intuitive way to add shortcodes to the WordPress editor~~
 * ~~Caching via the [WordPress Transients API](http://codex.wordpress.org/Transients_API)~~
-* Longer-term caching to compensate for a shaky API
+* ~~Longer-term caching to compensate for a shaky API~~
 * A filter that allows users to change the shortcode name in case of conflicts
 
 ### Version 2.0
