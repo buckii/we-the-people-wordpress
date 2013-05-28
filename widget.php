@@ -1,0 +1,82 @@
+<?php
+/**
+ * "WTP Petition" widget
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+
+class WeThePeople_Plugin_Widget extends WP_Widget {
+
+  /**
+   * Widget constructor
+   * @see WP_Widget::__construct()
+   * @since 1.0
+   */
+  public function __construct() {
+    parent::__construct( 'wtp', __( 'WTP Petition', 'we-the-people' ),
+      array( 'description' => 'Embed a petition from We The People', 'we-the-people' ),
+      array( 'width' => 350 )
+    );
+  }
+
+  /**
+   * Front-end display of widget.
+   * @param array $args Widget arguments.
+   * @param array $instance Saved values from database.
+   * @return void
+   * @see WP_Widget::widget()
+   * @since 1.0
+   */
+  public function widget( $args, $instance ) {
+    global $we_the_people;
+    if ( ! $we_the_people instanceof WeThePeople_Plugin ) {
+      $we_the_people = new WeThePeople_Plugin;
+    }
+
+    if ( isset( $instance['petition_id'] ) && $instance['petition_id'] ) {
+      if ( $petition = $we_the_people->api( 'retrieve', array( 'id' => $instance['petition_id'] ) ) ) {
+        echo $args['before_widget'];
+        $we_the_people->display_petition( $petition, array( 'echo' => true, 'widget' => true, 'widget_args' => $args ) );
+        echo $args['after_widget'];
+      }
+    }
+  }
+
+  /**
+   * Back-end widget form.
+   * @param array $instance Previously saved values from database.
+   * @return void
+   * @see WP_Widget::form()
+   * @since 1.0
+   */
+  public function form( $instance ) {
+    printf( '<label for="%s">%s</label>', $this->get_field_id( 'petition_id' ), __( 'Petition ID:', 'we-the-people' ) );
+    printf( '<input name="%s" id="%s" type="text" class="widefat" value="%s" />', $this->get_field_name( 'petition_id' ), $this->get_field_id( 'petition_id' ), ( isset( $instance['petition_id'] ) ? esc_attr( $instance['petition_id'] ) : '' ) );
+  }
+
+  /**
+   * Sanitize widget form values as they are saved.
+   * @param array $new_instance Values just sent to be saved.
+   * @param array $old_instance Previously saved values from database.
+   * @return array Updated safe values to be saved.
+   * @see WP_Widget::update()
+   * @since 1.0
+   */
+  public function update( $new_instance, $old_instance ) {
+    return array(
+      'petition_id' => preg_replace( '/[^A-Z0-9]/i', '', $new_instance['petition_id'] )
+    );
+  }
+
+}
+
+/**
+ * Register our widget on widgets_init
+ * @uses register_widget
+ * @since 1.0
+ */
+function wethepeople_register_widget() {
+  register_widget( 'WeThePeople_Plugin_Widget' );
+}
+add_action( 'widgets_init', 'wethepeople_register_widget' );

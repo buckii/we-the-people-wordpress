@@ -1,6 +1,6 @@
 <?php
 /**
- * The standard template for displaying a We The People petition
+ * The standard template for displaying a We The People petition as a widget
  *
  * @package We The People
  * @author Buckeye Interactive
@@ -10,12 +10,12 @@
 add_filter( 'wethepeople_petition_body', 'wpautop' );
 add_filter( 'wethepeople_petition_body', 'wptexturize' );
 
-// Uncomment the following line if you want to see the petition object during development
-//printf( '<pre>%s</pre>', print_r( $petition, true ) );
+// Extract the widget arguments
+extract( $widget_args );
 ?>
 
 <div id="wtp-petition-<?php echo $petition->id; ?>" class="wtp-petition clearfix">
-  <h2 class="petition-title"><?php echo $petition->title; ?></h2>
+  <?php echo $before_title; ?><?php echo $petition->title; ?><?php echo $after_title; ?>
   <blockquote><?php echo apply_filters( 'wethepeople_petition_body', $petition->body ); ?></blockquote>
 
 <?php if ( $petition->status == 'responded' ) : ?>

@@ -15,6 +15,8 @@
  * @author Buckeye Interactive
  */
 
+require_once dirname( __FILE__ ) . '/widget.php';
+
 class WeThePeople_Plugin {
 
   /**
@@ -119,13 +121,28 @@ class WeThePeople_Plugin {
     }
     $contents = null;
 
-    // Load the appropriate template file
-    $templates = array(
-      sprintf( 'wtp-petition-%d.php', $petition->id ),
-      'wtp-petition.php'
-    );
-    if ( ! $template_file = locate_template( $templates, false, false ) ) {
-      $template_file = dirname( __FILE__ ) . '/templates/wtp-petition.php';
+    // Load the appropriate template file for the widget
+    if ( isset( $data['widget'] ) && $data['widget'] ) {
+      $templates = array(
+        sprintf( 'wtp-petition-widget-%s.php', $petition->id ),
+        'wtp-petition-widget.php'
+      );
+      if ( ! $template_file = locate_template( $templates, false, false ) ) {
+        $template_file = dirname( __FILE__ ) . '/templates/wtp-petition-widget.php';
+      }
+
+      // We need to make sure these are available to the template when we load it
+      $widget_args = ( isset( $data['widget_args'] ) ? $data['widget_args'] : array() );
+
+    // Actual content, not a sidebar
+    } else {
+      $templates = array(
+        sprintf( 'wtp-petition-%s.php', $petition->id ),
+        'wtp-petition.php'
+      );
+      if ( ! $template_file = locate_template( $templates, false, false ) ) {
+        $template_file = dirname( __FILE__ ) . '/templates/wtp-petition.php';
+      }
     }
 
     // Echo or load the file in the output buffer

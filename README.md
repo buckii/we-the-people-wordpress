@@ -131,7 +131,8 @@ At this time the We The People API is read-only, meaning your readers would need
 * ~~An intuitive way to add shortcodes to the WordPress editor~~
 * ~~Caching via the [WordPress Transients API](http://codex.wordpress.org/Transients_API)~~
 * ~~Longer-term caching to compensate for a shaky API~~
-* A filter that allows users to change the shortcode name in case of conflicts
+* ~~A filter that allows users to change the shortcode name in case of conflicts~~
+* Sidebar widget
 
 ### Version 2.0
 
