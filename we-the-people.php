@@ -165,7 +165,7 @@ class WeThePeople_Plugin {
       $this->error( sprintf( __( 'API response for petition %s came back empty', 'we-the-people' ), $atts['id'] ) );
       return;
     }
-    return $this->display_petition( current( $response ), $atts );
+    return $this->display_petition( $response, $atts );
   }
 
   /**
@@ -233,7 +233,7 @@ class WeThePeople_Plugin {
    */
   protected function api_retrieve_action( $args=array() ) {
     $id = ( isset( $args['id'] ) ? $args['id'] : null );
-    return $this->make_api_call( sprintf( 'petitions/%s.json', $id ) );
+    return current( $this->make_api_call( sprintf( 'petitions/%s.json', $id ) ) );
   }
 
   /**
