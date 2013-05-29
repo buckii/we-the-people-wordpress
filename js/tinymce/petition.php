@@ -24,9 +24,6 @@ if ( file_exists( $config ) ) {
 <title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
 <link href="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>" type="text/css" rel="stylesheet" media="screen" />
 <link href="../../css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
-<style type="text/css">
-  #petition-search-form.loading { background: url('<?php echo includes_url( 'images/wpspin.gif' ); ?>') right center no-repeat; }
-</style>
 </head>
 
 <body id="wtp-petition" class="wp-core-ui">
