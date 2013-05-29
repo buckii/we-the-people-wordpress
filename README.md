@@ -1,7 +1,9 @@
 ![We The People](assets/banner-1544x500.png)
 # We The People WordPress Plugin
 
-Easily embed White House petitions from We The People into your WordPress site via shortcodes and widgets.
+In May 2013 the White House released an API for We The People, a petition application designed to give citizens a direct line to the White House. The White House has committed to issue an official, public response to petitions that cross a particular signature threshold.
+
+This plugin allows WordPress site owners to search and embed petitions from We The People into WordPress. Perhaps you're writing an opinion piece on a petition and want real-time statistics on signatures and any response from the White House. Maybe you're a supporter of a particular issue and want to feature it on your sidebar to help promote awareness. The ease of WordPress with the totally customizable templates of the We The People plugin give you the power to share what's important to you.
 
 ## Using the plugin
 
@@ -94,9 +96,11 @@ String (a modified version of `$content`).
 
 The plugin has intentionally avoided a `[petition]` shortcode in favor of `[wtp-shortcode]` to reduce the risk of conflicting with other `[petition]` shortcodes that may be registered in another plugin or theme. Returning a string at this filter will allow you to override the default shortcode name of `wtp-petition`.
 
+**Note:** This will not update existing post content - if you change the shortcode name and find yourself with a bunch of `[wtp-petition]` shortcodes appearing throughout the site these will need to be manually updated to match the new shortcode name. In extreme cases you may just want to double-register the shortcode ( `add_shortcode( 'my-petition-shortcode-name', array( 'WeThePeople_Plugin', 'petition_shortcode' ) );`) and forgo the `wethepeople_shortcode_name` filter.
+
 ###### Arguments
 
-*none*
+* `$shortcode_name` (str) The current shortcode name ('wtp-petition')
 
 ###### Return value
 
@@ -148,4 +152,5 @@ At this time the We The People API is read-only, meaning your readers would need
 
 ## Special Thanks
 
-* [Tony Todoroff](http://www.georgetodoroff.com/) for the WordPress.org banners
+* The White House for putting together the We The People API and inviting Buckeye Interactive to participate in the National Day of Civic Hacking.
+* [Tony Todoroff](http://www.georgetodoroff.com/) for the WordPress.org banners and TinyMCE icon.
