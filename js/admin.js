@@ -44,9 +44,12 @@ jQuery( function ( $ ) {
   "use strict";
 
   $('body').on( 'keyup', 'input.wtp-petition-search', function () {
-    var self = $(this);
+    var self = $(this),
+    results = self.parents( 'form' ).find( '.wtp-search-results' );
     if ( self.val().length >= 3 ) {
-      wethepeople_petition_search( self, self.parents( 'form' ).find( '.wtp-search-results' ) );
+      wethepeople_petition_search( self, results );
+    } else if ( self.val().length === 0 ) {
+      results.html( '' );
     }
     return true;
   });
