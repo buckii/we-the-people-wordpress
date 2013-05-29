@@ -321,6 +321,7 @@ class WeThePeople_Plugin {
 
   /**
    * Register plugin JavaScript
+   * @global $pagenow
    * @return void
    * @uses is_admin()
    * @uses plugins_url()
@@ -330,6 +331,8 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   protected function register_scripts() {
+    global $pagenow;
+
     wp_register_script( 'we-the-people', plugins_url( 'js/we-the-people.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
     $localization = array(
       'i18n' => array(
@@ -338,14 +341,18 @@ class WeThePeople_Plugin {
       )
     );
     wp_localize_script( 'we-the-people', 'WeThePeople', $localization );
+    wp_register_script( 'we-the-people-admin', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
 
     if ( ! is_admin() ) {
       wp_enqueue_script( 'we-the-people' );
+    } elseif ( is_admin() && $pagenow == 'widgets.php' ) {
+      wp_enqueue_script( 'we-the-people-admin' );
     }
   }
 
   /**
    * Register plugin styles
+   * @global $pagenow
    * @return void
    * @uses is_admin()
    * @uses plugins_url()
@@ -354,10 +361,15 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   protected function register_styles() {
+    global $pagenow;
+
     wp_register_style( 'we-the-people', plugins_url( 'css/we-the-people.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
+    wp_register_style( 'we-the-people-admin', plugins_url( 'css/admin.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
 
     if ( ! is_admin() ) {
       wp_enqueue_style( 'we-the-people' );
+    } elseif ( is_admin() && $pagenow == 'widgets.php' ) {
+      wp_enqueue_style( 'we-the-people-admin' );
     }
   }
 

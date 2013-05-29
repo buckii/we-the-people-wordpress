@@ -1,5 +1,5 @@
 /**
- * Styles for the "Insert Petition" TinyMCE plugin
+ * Admin styles for We The People
  *
  * @package We The People
  * @author Buckeye Interactive
@@ -16,7 +16,7 @@
 #tabs a.current { background-color: #fff; border-color: #dfdfdf; border-bottom-color: #fff; }
 .tab { margin: 0; padding: 5px 20px 10px; background: #fff; border: 1px solid #dfdfdf; }
 
-#search-results { max-height: 250px; overflow: auto; margin-top: 5px; }
-#search-results ul { display: block; margin: 0; padding: 0; }
-#search-results li { position: relative; margin-bottom: 1em; padding-right: 100px; }
-#search-results .signature-count { position: absolute; right: 0; top: 0; display: block; max-width: 100px; overflow: hidden; font-size: .9em; text-align: right; white-space: nowrap; text-overflow: ellipsis; font-style: italic; }
+.wtp-search-results { max-height: 250px; overflow: auto; margin-top: 5px; }
+.wtp-search-results ul { display: block; margin: 0; padding: 0; }
+.wtp-search-results li { position: relative; margin-bottom: 1em; padding-right: 100px; }
+.wtp-search-results .signature-count { position: absolute; right: 0; top: 0; display: block; max-width: 100px; overflow: hidden; font-size: .9em; text-align: right; white-space: nowrap; text-overflow: ellipsis; font-style: italic; }

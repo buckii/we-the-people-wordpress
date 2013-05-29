@@ -42,7 +42,7 @@ jQuery( function ( $ ) {
   });
 
   // Clicking a search result should populate the petition ID input
-  $('.wtp-search-results').on( 'click', 'a', function ( e ) {
+  $('body').on( 'click', '.wtp-search-results a', function ( e ) {
     var self = $(this);
     e.preventDefault();
     self.parents( 'form' ).find( 'input.wtp-petition-id' ).val( self.data( 'petition-id' ) );

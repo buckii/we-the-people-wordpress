@@ -51,8 +51,18 @@ class WeThePeople_Plugin_Widget extends WP_Widget {
    * @since 1.0
    */
   public function form( $instance ) {
+    print '<p>';
     printf( '<label for="%s">%s</label>', $this->get_field_id( 'petition_id' ), __( 'Petition ID:', 'we-the-people' ) );
-    printf( '<input name="%s" id="%s" type="text" class="widefat" value="%s" />', $this->get_field_name( 'petition_id' ), $this->get_field_id( 'petition_id' ), ( isset( $instance['petition_id'] ) ? esc_attr( $instance['petition_id'] ) : '' ) );
+    printf( '<input name="%s" id="%s" type="text" class="wtp-petition-id widefat" value="%s" />', $this->get_field_name( 'petition_id' ), $this->get_field_id( 'petition_id' ), ( isset( $instance['petition_id'] ) ? esc_attr( $instance['petition_id'] ) : '' ) );
+    print '</p>';
+
+    // Search form
+    printf( '<p><strong>%s</strong></p>', __( "Don't know your petition ID?", 'we-the-people' ) );
+    print '<p>';
+    printf( '<label for="%s">%s</label>', $this->get_field_id( 'petition-search-term' ), __( 'Search petitions:', 'we-the-people' ) );
+    printf( '<input name="%s" id="%s" type="text" class="wtp-petition-search widefat" placeholder="%s" />', $this->get_field_name( 'petition-search-term' ), $this->get_field_id( 'petition-search-term' ), esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ) );
+    print '</p>';
+    print '<div class="wtp-search-results"></div>';
   }
 
   /**

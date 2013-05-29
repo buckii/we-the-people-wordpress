@@ -23,7 +23,7 @@ if ( file_exists( $config ) ) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
 <link href="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>" type="text/css" rel="stylesheet" media="screen" />
-<link href="petition.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
+<link href="../../css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 <style type="text/css">
   #petition-search-form.loading { background: url('<?php echo includes_url( 'images/wpspin.gif' ); ?>') right center no-repeat; }
 </style>
@@ -38,8 +38,8 @@ if ( file_exists( $config ) ) {
         <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
 
         <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
-        <label for="petition-search-form"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
-        <input name="petition-search-form" id="petition-search-form" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
+        <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
+        <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
         <div id="search-results" class="wtp-search-results"></div>
       </div><!-- #tab-basic -->
 

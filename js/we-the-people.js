@@ -14,10 +14,11 @@ jQuery( function ( $ ) {
    * Truncate an embedded petition to the first paragraph and hide the others behind an a.more
    */
   $('body').find( '.wtp-petition blockquote' ).each( function () {
-    var self = $(this);
+    var self = $(this),
+    is_widget = ( self.parents( '.widget_wtp' ).length > 0 );
     if ( self.find( 'p' ).length > 1 ) {
-      self.find( 'p:not(:first)' ).wrapAll( '<div class="extended" />' );
-      self.append( '<a href="#" class="toggle more" role="button">' + WeThePeople.i18n.more + '</a>' ).addClass( 'collapsed' );
+      self.find( ( is_widget ? 'p' : 'p:not(:first)' ) ).wrapAll( '<div class="extended" />' );
+      self.append( '<p class="toggle-btn"><a href="#" class="toggle more" role="button">' + WeThePeople.i18n.more + '</a></p>' ).addClass( 'collapsed' );
     }
   });
 
@@ -25,9 +26,11 @@ jQuery( function ( $ ) {
    * Scripting for the more/less toggle
    */
   $('body').on( 'click', '.wtp-petition a.toggle', function ( e ) {
-    var self = $(this);
+    var self = $(this),
+    bq = self.parents( 'blockquote' );
     e.preventDefault();
-    self.siblings( '.extended' ).slideToggle( 200, function () {
+    bq.find( '.extended' ).slideToggle( 200, function () {
+      bq.toggleClass( 'collapsed expanded' );
       self.text( ( self.hasClass( 'more' ) ? WeThePeople.i18n.less : WeThePeople.i18n.more ) ).toggleClass( 'more less' );
     });
     return false;
