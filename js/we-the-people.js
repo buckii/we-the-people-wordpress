@@ -14,10 +14,9 @@ jQuery( function ( $ ) {
    * Truncate an embedded petition to the first paragraph and hide the others behind an a.more
    */
   $('body').find( '.wtp-petition blockquote' ).each( function () {
-    var self = $(this),
-    is_widget = ( self.parents( '.widget_wtp' ).length > 0 );
+    var self = $(this);
     if ( self.find( 'p' ).length > 1 ) {
-      self.find( ( is_widget ? 'p' : 'p:not(:first)' ) ).wrapAll( '<div class="extended" />' );
+      self.find( 'p:not(:first)' ).wrapAll( '<div class="extended" />' );
       self.append( '<p class="toggle-btn"><a href="#" class="toggle more" role="button">' + WeThePeople.i18n.more + '</a></p>' ).addClass( 'collapsed' );
     }
   });
