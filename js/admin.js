@@ -7,6 +7,8 @@
 /* jslint browser: true, white: true */
 /* global jQuery: true, ajaxurl: true */
 
+var WeThePeopleCache = {};
+
 /**
  * Fire off an ajax request for the wtp_petition_search and handle the results
  * @global ajaxurl
@@ -23,10 +25,18 @@ function wethepeople_petition_search( searchInput, results ) {
   };
   searchInput.addClass( 'loading' );
 
-  jQuery.post( ajaxurl, data, function ( response ) {
-    results.html( response );
+  // Attempt to pull the data from the cache
+  if ( WeThePeopleCache[ data.term ] ) {
+    results.html( WeThePeopleCache[ data.term ] );
     searchInput.removeClass( 'loading' );
-  });
+
+  } else {
+    jQuery.post( ajaxurl, data, function ( response ) {
+      results.html( response );
+      searchInput.removeClass( 'loading' );
+      WeThePeopleCache[ data.term ] = response;
+    });
+  }
   return;
 }
 
