@@ -40,14 +40,13 @@
     /**
      * Set the plugin information
      * @return object
-     * @todo Put the plugin URL in place for infourl
      */
     getInfo : function() {
       return {
         longname : 'We The People Petition',
         author : 'Buckeye Interactive',
         authorurl : 'http://www.buckeyeinteractive.com',
-        infourl : 'http://www.buckeyeinteractive.com',
+        infourl : 'http://wordpress.org/plugins/we-the-people/',
         version : '1.0'
       };
     }
