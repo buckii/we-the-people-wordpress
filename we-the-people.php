@@ -37,7 +37,7 @@ class WeThePeople_Plugin {
   /**
    * The amount of time (in seconds) the long-term transient should live before it's purged
    */
-  const TRANSIENT_LT_EXPIRES = 3600;
+  const TRANSIENT_LT_EXPIRES = 86400;
 
   /**
    * @var str $shortcode_name The name of the shortcode to register (defaults to 'wtp-petition')
