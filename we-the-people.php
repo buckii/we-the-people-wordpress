@@ -158,7 +158,7 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Handler for the [petition] shortcode
+   * Handler for the [wtp-petition] shortcode
    * @param array $atts Attributes passed in the shortcode call
    * @param str $content Content to be added above the petition information
    * @return str

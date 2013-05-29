@@ -7,11 +7,13 @@ Easily embed White House petitions from We The People into your WordPress site v
 
 ### Shortcodes
 
-The simplest way to get started is through WordPress shortcodes. The syntax is as easy as: `[petition id="123"]`.
+The simplest way to get started is through WordPress shortcodes. The syntax is as easy as: `[wtp-petition id="123"]`.
 
 Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the ["Insert We The People Petition" button](js/tinymce/insert-petition.png) will open an overlay that will let you search the We The People petitions by title to find your issue.
 
 ### Widget
+
+To add a We The People petition to a WordPress dynamic sidebar go to Appearance > Widgets and drag a "WTP Petition" widget into the desired sidebar. Like the TinyMCE button the widget allows you to search for your desired petition by title.
 
 ### `$we_the_people` global variable (advanced)
 
@@ -45,11 +47,21 @@ We The People has a built-in petition template but makes it easy to override in 
 
 We The People uses the following order to determine which template to use when displaying a petition:
 
+**Shortcodes:**
+
 1. wtp-petition-{id}.php (child theme)
 2. wtp-petition.php (child theme)
 3. wtp-petition-{id}.php (parent theme)
 4. wtp-petition.php (parent theme)
 5. templates/wtp-petition.php (plugin)
+
+**Widgets:**
+
+1. wtp-petition-widget-{id}.php (child theme)
+2. wtp-petition-widget.php (child theme)
+3. wtp-petition-widget-{id}.php (parent theme)
+4. wtp-petition-widget.php (parent theme)
+5. templates/wtp-petition-widget.php (plugin)
 
 ## Actions and Filters
 
@@ -129,16 +141,6 @@ At this time the We The People API is read-only, meaning your readers would need
 * First public release of the plugin, coordinated with the National Day of Civic Hacking at the White House on June 1, 2013.
 
 ## Roadmap/To-do
-
-### Version 1.0
-
-* A flexible templating system
-* Documentation (this doc + WordPress.org README)
-* ~~An intuitive way to add shortcodes to the WordPress editor~~
-* ~~Caching via the [WordPress Transients API](http://codex.wordpress.org/Transients_API)~~
-* ~~Longer-term caching to compensate for a shaky API~~
-* ~~A filter that allows users to change the shortcode name in case of conflicts~~
-* Sidebar widget
 
 ### Version 2.0
 
