@@ -22,13 +22,7 @@ if ( file_exists( $config ) ) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
-<script type="text/javascript" src="<?php echo includes_url( '/js/jquery/jquery.js' ); ?>"></script>
-<script type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
-<script type="text/javascript">
-  var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
-</script>
-<script type="text/javascript" src="../admin.js"></script>
-<style type="text/css" src="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>"></style>
+<link href="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>" type="text/css" rel="stylesheet" media="screen" />
 <link href="petition.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 <style type="text/css">
   #petition-search-form.loading { background: url('<?php echo includes_url( 'images/wpspin.gif' ); ?>') right center no-repeat; }
@@ -38,14 +32,8 @@ if ( file_exists( $config ) ) {
 <body id="wtp-petition" class="wp-core-ui">
   <form id="wtp-insert-petition" action="?" onsubmit="javascript:wethepeople.insert();">
     <h3><?php _e( 'Insert a petition', 'we-the-people' ); ?></h3>
-    <?php /*<ul id="tabs">
-      <li><a href="#tab-basic" accesskey="1" class="current"><?php _e( 'Basic', 'we-the-people' ); ?></a></li>
-      <li><a href="#tab-advanced" accesskey="2"><?php _e( 'Advanced', 'we-the-people' ); ?></a></li>
-    </ul>*/ ?>
     <div class="wrap">
       <div id="tab-basic" class="tab">
-        <?php /*<h3><?php _e( 'Select your petition', 'we-the-people' ); ?></h3>*/ ?>
-
         <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
         <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
 
@@ -55,13 +43,7 @@ if ( file_exists( $config ) ) {
         <div id="search-results" class="wtp-search-results"></div>
       </div><!-- #tab-basic -->
 
-      <?php /*<div id="tab-advanced" class="tab">
-        <h3><?php _e( 'Advanced settings', 'we-the-people' ); ?></h3>
-
-        <label for="petition-intro"><?php _e( 'Preamble', 'we-the-people' ); ?></label>
-        <textarea name="petition-intro" id="petition-intro" rows="4" cols="40"></textarea>
-      </div><!-- #tab-advanced -->*/ ?>
-    </div><!-- .wrap.tabbed -->
+    </div><!-- .wrap -->
 
     <div class="mceActionPanel">
       <input id="insert" type="submit" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
@@ -69,34 +51,13 @@ if ( file_exists( $config ) ) {
     </div><!-- .mceActionPanel -->
   </form>
 
+<script type="text/javascript" src="<?php echo includes_url( '/js/jquery/jquery.js' ); ?>"></script>
+<script type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
 <script type="text/javascript">
-  /**
-   * @todo Refactor this
-   */
-
-
-  function wethepeople_init() {
-    "use strict";
-    var $ = jQuery,
-    tabs = $('#tabs'),
-    tabbedArea = $('.tabbed');
-
-    /* Tabbed navigation */
-    tabs.show();
-    tabbedArea.find( '.tab:not(:first)' ).hide();
-
-    tabs.on( 'click', 'a', function ( e ) {
-      var self = $(this);
-      e.preventDefault();
-
-      tabs.find( 'a.current' ).removeClass( 'current' );
-      self.addClass( 'current' );
-      tabbedArea.find( '.tab:visible' ).hide();
-      $( self.attr( 'href' ) ).show();
-      return false;
-    });
-  }
-
+  var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+</script>
+<script type="text/javascript" src="../admin.js"></script>
+<script type="text/javascript">
   var wethepeople = {
     editor: null,
     init: function ( ed ) {
@@ -125,11 +86,6 @@ if ( file_exists( $config ) ) {
 
   // Setup our wethepeople object
   tinyMCEPopup.onInit.add( wethepeople.init, wethepeople );
-
-  // This will let us actually use jQuery event listeners
-  tinyMCEPopup.executeOnLoad( 'wethepeople_init()' );
-  wethepeople_init();
-
 </script>
 </body>
 </html>
