@@ -23,7 +23,11 @@ if ( file_exists( $config ) ) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
 <script type="text/javascript" src="<?php echo includes_url( '/js/jquery/jquery.js' ); ?>"></script>
-<script language="javascript" type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
+<script type="text/javascript" src="<?php echo includes_url( '/js/tinymce/tiny_mce_popup.js' ); ?>"></script>
+<script type="text/javascript">
+  var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+</script>
+<script type="text/javascript" src="../admin.js"></script>
 <style type="text/css" src="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>"></style>
 <link href="petition.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 <style type="text/css">
@@ -43,12 +47,12 @@ if ( file_exists( $config ) ) {
         <?php /*<h3><?php _e( 'Select your petition', 'we-the-people' ); ?></h3>*/ ?>
 
         <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
-        <input name="petition-id" id="petition-id" type="text" />
+        <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
 
         <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
-        <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
-        <input name="petition-search-form" id="petition-search-form" type="text" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc', 'we-the-people' ) ); ?>" />
-        <div id="search-results"></div>
+        <label for="petition-search-form"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
+        <input name="petition-search-form" id="petition-search-form" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
+        <div id="search-results" class="wtp-search-results"></div>
       </div><!-- #tab-basic -->
 
       <?php /*<div id="tab-advanced" class="tab">
@@ -69,23 +73,7 @@ if ( file_exists( $config ) ) {
   /**
    * @todo Refactor this
    */
-  var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 
-  function wethepeople_petition_search() {
-    "use strict";
-    var $ = jQuery,
-    data = {
-      action: 'wtp_petition_search',
-      format: 'ul',
-      term: $('#petition-search-form').val()
-    };
-
-    $.post( ajaxurl, data, function ( response ) {
-      $('#search-results').html( response );
-      $('#petition-search-form').removeClass( 'loading' );
-    });
-    return;
-  }
 
   function wethepeople_init() {
     "use strict";
@@ -105,22 +93,6 @@ if ( file_exists( $config ) ) {
       self.addClass( 'current' );
       tabbedArea.find( '.tab:visible' ).hide();
       $( self.attr( 'href' ) ).show();
-      return false;
-    });
-
-    /* Petition search */
-    $('#petition-search-form').on( 'keyup', function () {
-      var self = $(this);
-      if ( self.val().length >= 3 ) {
-        self.addClass( 'loading' );
-        wethepeople_petition_search();
-      }
-      return true;
-    });
-
-    $('#search-results').on( 'click', 'a', function ( e ) {
-      e.preventDefault();
-      $('#petition-id').val( $(this).data( 'petition-id' ) );
       return false;
     });
   }

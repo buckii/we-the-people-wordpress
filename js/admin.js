@@ -1,0 +1,51 @@
+/**
+ * Admin scripts for the We The People plugin
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+/* jslint browser: true, white: true */
+/* global jQuery: true, ajaxurl: true */
+
+/**
+ * Fire off an ajax request for the wtp_petition_search and handle the results
+ * @global ajaxurl
+ * @param object searchInput A jQuery object representing the search input
+ * @param object results A jQuery object to have its .html() set to contain the results
+ * @return void
+ */
+function wethepeople_petition_search( searchInput, results ) {
+  "use strict";
+  var data = {
+    action: 'wtp_petition_search',
+    format: 'ul',
+    term: searchInput.val()
+  };
+  searchInput.addClass( 'loading' );
+
+  jQuery.post( ajaxurl, data, function ( response ) {
+    results.html( response );
+    searchInput.removeClass( 'loading' );
+  });
+  return;
+}
+
+jQuery( function ( $ ) {
+  "use strict";
+
+  $('body').on( 'keyup', 'input.wtp-petition-search', function () {
+    var self = $(this);
+    if ( self.val().length >= 3 ) {
+      wethepeople_petition_search( self, self.parents( 'form' ).find( '.wtp-search-results' ) );
+    }
+    return true;
+  });
+
+  // Clicking a search result should populate the petition ID input
+  $('.wtp-search-results').on( 'click', 'a', function ( e ) {
+    var self = $(this);
+    e.preventDefault();
+    self.parents( 'form' ).find( 'input.wtp-petition-id' ).val( self.data( 'petition-id' ) );
+    return false;
+  });
+});
