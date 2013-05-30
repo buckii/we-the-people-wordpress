@@ -158,6 +158,21 @@ class WeThePeople_Plugin {
   }
 
   /**
+   * Get a list of themes registered within the plugin
+   * @return array css-class => Nice name of different themes
+   * @uses apply_filters()
+   * @since 1.1
+   */
+  public function get_themes() {
+    $themes = array(
+      'dark' => __( 'Dark', 'we-the-people' )
+    );
+    $themes = apply_filters( 'wethepeople_registered_themes', $themes );
+    sort( $themes, SORT_STRING | SORT_FLAG_CASE );
+    return $themes;
+  }
+
+  /**
    * Handler for the [wtp-petition] shortcode
    * @param array $atts Attributes passed in the shortcode call
    * @param str $content Content to be added above the petition information
@@ -167,7 +182,9 @@ class WeThePeople_Plugin {
    */
   public function petition_shortcode( $atts, $content='' ) {
     $defaults = array(
-      'id' => false
+      'class' => '',
+      'id' => false,
+      'theme' => false
     );
     $atts = shortcode_atts( $defaults, $atts );
 
