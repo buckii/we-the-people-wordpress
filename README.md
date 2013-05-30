@@ -158,6 +158,12 @@ At this time the We The People API is read-only, meaning your readers would need
 
 ## Roadmap/To-do
 
+### Version 1.1
+
+* Add CSS classes based on the topics related to a petition (`.topic-gun-control`, `.topic-taxes`, etc.) (#5)
+* Better petition searches on the back-end (#6)
+* Themes that can be applied if the user *doesn't* want the hands-off approach we're currently taking (#7)
+
 ### Version 2.0
 
 * Once the write API becomes available make it easy for visitors to sign a petition
