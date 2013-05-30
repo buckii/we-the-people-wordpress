@@ -13,6 +13,13 @@ The simplest way to get started is through WordPress shortcodes. The syntax is a
 
 Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the ["Insert We The People Petition" button](js/tinymce/insert-petition.png) will open an overlay that will let you search the We The People petitions by title to find your issue.
 
+#### Shortcode attributes
+
+Besides the (required) `id` attribute there are a number of other attributes that can be passed to the `[wtp-petition]` shortcode:
+
+* `class` - Additional space-separated CSS classes to pass to the `.wtp-petition` container
+* `theme` - Select from built-in themes
+
 ### Widget
 
 To add a We The People petition to a WordPress dynamic sidebar go to Appearance > Widgets and drag a "WTP Petition" widget into the desired sidebar. Like the TinyMCE button the widget allows you to search for your desired petition by title.
@@ -98,6 +105,29 @@ function insert_preamble( $content ) {
   return '<p class="preamble">We petition the Obama Administration to&hellip;</p>' . $content;
 }
 add_filter( 'wethepeople_petition_body', 'insert_preamble' );
+```
+
+##### `wethepeople_registered_themes`
+
+This filter can be used to modify the list of themes registered within We The People. Themes are defined in an array as `css-class => Theme name`.
+
+###### Arguments
+
+* `$themes` (array) An array of registered themes
+
+###### Return value
+
+Array (a modified version of `$themes`)
+
+###### Example
+
+This will register 'My custom theme' as a WTP theme, allowing you to write styles for `.wtp-petition.mytheme`:
+
+```php
+function mytheme_register_wtp_theme( $themes ) {
+  return array_merge( $themes, array( 'mytheme' => __( 'My custom theme', 'my-theme' ) );
+}
+add_filter( 'wethepeople_registered_themes', 'mytheme_register_wtp_theme' );
 ```
 
 ##### `wethepeople_shortcode_name`

@@ -13,6 +13,9 @@
 
 .widget_wtp .wtp-petition .sign-btn { float: none; display: block; }
 
+/** Themes */
+.wtp-petition.dark { padding: 1em; color: #fff; background: #222; }
+
 @media print {
   .wtp-petition .toggle-btn { display: none !important; }
   .wtp-petition blockquote .extended { display: block; }
