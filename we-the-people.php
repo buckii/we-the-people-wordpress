@@ -97,8 +97,7 @@ class WeThePeople_Plugin {
     if ( ! method_exists( $this, $method ) ) {
       $this->error( sprintf( __( 'Class method %s does not exist', 'we-the-people' ), $method ) );
     }
-    $response = call_user_func( array( $this, $method ), $args );
-    return new We_The_People_Entity( $response );
+    return call_user_func( array( $this, $method ), $args );
   }
 
   /**
@@ -269,7 +268,7 @@ class WeThePeople_Plugin {
    */
   protected function api_retrieve_action( $args=array() ) {
     $id = ( isset( $args['id'] ) ? $args['id'] : null );
-    return current( $this->make_api_call( sprintf( 'petitions/%s.json', $id ) ) );
+    return new We_The_People_Entity( current( $this->make_api_call( sprintf( 'petitions/%s.json', $id ) ) ) );
   }
 
   /**

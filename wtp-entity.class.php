@@ -66,10 +66,16 @@ class We_The_People_Entity {
       // If we have an issues property we want to turn these into classes
       if ( isset( $this->issues ) && is_array( $this->issues ) ) {
         foreach ( $this->issues as $issue ) {
-          $prefix = apply_filters( 'wethepeople_issue_class_prefix', 'issue-' );
-          $classes[] = sprintf( '%s%s', $prefix, sanitize_title_with_dashes( $issue->name ) );
-          $classes[] = sprintf( '%s%d', $prefix, $issue->id );
+          $issue_prefix = apply_filters( 'wethepeople_issue_class_prefix', 'issue-' );
+          $classes[] = sprintf( '%s%s', $issue_prefix, sanitize_title_with_dashes( $issue->name ) );
+          $classes[] = sprintf( '%s%d', $issue_prefix, $issue->id );
         }
+      }
+
+      // Set a CSS class for the petition status
+      if ( isset( $this->status ) && $this->status ) {
+        $status_prefix = apply_filters( 'wethepeople_status_class_prefix', 'status-' );
+        $classes[] = sprintf( '%s%s', $status_prefix, $this->status );
       }
 
       // Save these to our class property
