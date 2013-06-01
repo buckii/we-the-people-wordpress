@@ -1,5 +1,5 @@
 === We The People ===
-Contributors: buckeyeinteractive, stevegrunwell
+Contributors: BuckeyeInteractive, stevegrunwell
 Donate link: http://www.buckeyeinteractive.com/donations
 Tags: We The People, petition, democracy, White House, America, Government
 Requires at least: 3.5.1
