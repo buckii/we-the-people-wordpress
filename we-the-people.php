@@ -16,6 +16,7 @@
  */
 
 require_once dirname( __FILE__ ) . '/widget.php';
+require_once dirname( __FILE__ ) . '/wtp-entity.class.php';
 
 class WeThePeople_Plugin {
 
@@ -96,7 +97,8 @@ class WeThePeople_Plugin {
     if ( ! method_exists( $this, $method ) ) {
       $this->error( sprintf( __( 'Class method %s does not exist', 'we-the-people' ), $method ) );
     }
-    return call_user_func( array( $this, $method ), $args );
+    $response = call_user_func( array( $this, $method ), $args );
+    return new We_The_People_Entity( $response );
   }
 
   /**

@@ -14,7 +14,7 @@ add_filter( 'wethepeople_petition_body', 'wptexturize' );
 //printf( '<pre>%s</pre>', print_r( $petition, true ) );
 ?>
 
-<div id="wtp-petition-<?php echo $petition->id; ?>" class="wtp-petition clearfix">
+<div id="wtp-petition-<?php echo $petition->id; ?>" <?php $petition->petition_class( 'wtp-petition clearfix' ); ?>>
   <h2 class="petition-title"><?php echo $petition->title; ?></h2>
   <blockquote><?php echo apply_filters( 'wethepeople_petition_body', $petition->body ); ?></blockquote>
 
