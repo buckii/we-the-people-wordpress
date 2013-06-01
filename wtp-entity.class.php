@@ -66,8 +66,9 @@ class We_The_People_Entity {
       // If we have an issues property we want to turn these into classes
       if ( isset( $this->issues ) && is_array( $this->issues ) ) {
         foreach ( $this->issues as $issue ) {
-          $classes[] = sprintf( 'issue-%s', sanitize_title_with_dashes( $issue->name ) );
-          $classes[] = sprintf( 'issue-%d', $issue->id );
+          $prefix = apply_filters( 'wethepeople_issue_class_prefix', 'issue-' );
+          $classes[] = sprintf( '%s%s', $prefix, sanitize_title_with_dashes( $issue->name ) );
+          $classes[] = sprintf( '%s%d', $prefix, $issue->id );
         }
       }
 
