@@ -379,11 +379,13 @@ class WeThePeople_Plugin {
  * Create an instance of WeThePeople_Plugin and store it in the global $we_the_people
  * @global $we_the_people
  * @return bool
+ * @uses load_plugin_textdomain()
  * @since 1.0
  */
 function wethepeople_init() {
   global $we_the_people;
   $we_the_people = new WeThePeople_Plugin;
+  load_plugin_textdomain( 'we-the-people', null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
   return true;
 }
 add_action( 'init', 'wethepeople_init' );
