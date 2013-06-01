@@ -1,4 +1,4 @@
-=== WP Password Generator ===
+=== We The People ===
 Contributors: buckeyeinteractive, stevegrunwell
 Donate link: http://www.buckeyeinteractive.com/donations
 Tags: We The People, petition, democracy, White House, America, Government
