@@ -43,8 +43,8 @@ if ( file_exists( $config ) ) {
     </div><!-- .wrap -->
 
     <div class="mceActionPanel">
-      <input id="insert" type="submit" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
-      <input name="cancel" id="cancel" type="button" value="<?php echo esc_attr( __( 'Cancel', 'we-the-people' ) ); ?>" onclick="tinyMCEPopup.close();" />
+      <input id="insert" type="submit" value="<?php echo esc_attr( _x( 'Insert', 'Action button', 'we-the-people' ) ); ?>" />
+      <input name="cancel" id="cancel" type="button" value="<?php echo esc_attr( _x( 'Cancel', "Don't add a petition, close the dialog", 'we-the-people' ) ); ?>" onclick="tinyMCEPopup.close();" />
     </div><!-- .mceActionPanel -->
   </form>
 
