@@ -3,7 +3,7 @@
  * Plugin Name: We The People
  * Plugin URI: https://petitions.whitehouse.gov/
  * Description: Display White House petitions on your WordPress site
- * Version: 1.0
+ * Version: 1.1
  * Author: Buckeye Interactive
  * Author URI: http://www.buckeyeinteractive.com
  * License: GPLv2 or later
@@ -16,6 +16,7 @@
  */
 
 require_once dirname( __FILE__ ) . '/widget.php';
+require_once dirname( __FILE__ ) . '/wtp-entity.class.php';
 
 class WeThePeople_Plugin {
 
@@ -116,23 +117,21 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   public function display_petition( $petition, $data=array() ) {
-    if ( ! $petition || ! isset( $petition->id ) ) {
-      $this->error( __( 'Invalid petition object', 'we-the-people' ) );
-    }
     $contents = null;
 
-    // Load the appropriate template file for the widget
-    if ( isset( $data['widget'] ) && $data['widget'] ) {
+    // Service unavailable and/or invalid petition
+    if ( ! $petition || ! isset( $petition->id ) ) {
+      $templates = array(
+        sprintf( 'wtp-petition-error-%s.php', $petition->id ),
+        'wtp-petition-error.php'
+      );
+
+    // Widgets
+    } elseif ( isset( $data['widget'] ) && $data['widget'] ) {
       $templates = array(
         sprintf( 'wtp-petition-widget-%s.php', $petition->id ),
         'wtp-petition-widget.php'
       );
-      if ( ! $template_file = locate_template( $templates, false, false ) ) {
-        $template_file = dirname( __FILE__ ) . '/templates/wtp-petition-widget.php';
-      }
-
-      // We need to make sure these are available to the template when we load it
-      $widget_args = ( isset( $data['widget_args'] ) ? $data['widget_args'] : array() );
 
     // Actual content, not a sidebar
     } else {
@@ -140,10 +139,15 @@ class WeThePeople_Plugin {
         sprintf( 'wtp-petition-%s.php', $petition->id ),
         'wtp-petition.php'
       );
-      if ( ! $template_file = locate_template( $templates, false, false ) ) {
-        $template_file = dirname( __FILE__ ) . '/templates/wtp-petition.php';
-      }
     }
+
+    // Locate the template or default to system templates
+    if ( ! $template_file = locate_template( $templates, false, false ) ) {
+      $template_file = dirname( __FILE__ ) . '/templates/' . end( $templates );
+    }
+
+    // We need to make sure these are available to the template when we load it
+    $widget_args = ( isset( $data['widget_args'] ) ? $data['widget_args'] : array() );
 
     // Echo or load the file in the output buffer
     if ( isset( $data['echo'] ) && $data['echo'] ) {
@@ -211,6 +215,10 @@ class WeThePeople_Plugin {
     }
     $response =  $this->api( 'index', $args );
 
+    if ( ! $response ) {
+      die( __( 'Unable to connect to We The People', 'we-the-people' ) );
+    }
+
     // Determine how we're going to display the results
     switch ( $_POST['format'] ) {
       case 'ul':
@@ -250,7 +258,8 @@ class WeThePeople_Plugin {
    */
   protected function api_retrieve_action( $args=array() ) {
     $id = ( isset( $args['id'] ) ? $args['id'] : null );
-    return current( $this->make_api_call( sprintf( 'petitions/%s.json', $id ) ) );
+    $response = $this->make_api_call( sprintf( 'petitions/%s.json', $id ) );
+    return new We_The_People_Entity( ( $response && is_array( $response ) ? current( $response ) : '' ) );
   }
 
   /**
@@ -262,7 +271,7 @@ class WeThePeople_Plugin {
    * @todo Write some better error reporting
    */
   protected function error( $message ) {
-    trigger_error( sprintf( 'WeThePeople: %s', $message ), E_USER_NOTICE );
+    error_log( sprintf( 'WeThePeople: %s', $message ) );
   }
 
   /**
@@ -303,7 +312,7 @@ class WeThePeople_Plugin {
 
       // No long-term transients
       $this->error( $response->get_error_message() );
-      return;
+      return false;
 
     // It wasn't a WP_Error but the response doesn't look right...
     } elseif ( isset( $response['response']['code'] ) && $response['response']['code'] != 200 ) {
@@ -314,6 +323,14 @@ class WeThePeople_Plugin {
 
     // Save the response body as a transient
     $body = json_decode( $response['body'], false );
+
+    // Catch when the service is unavailable ::cough::shutdown::cough::
+    if ( isset( $body->metadata->responseInfo->status ) && $body->metadata->responseInfo->status == 500 ) {
+      $this->error( sprintf( __( 'The We The People site is currently unavailable: %s', 'we-the-people' ),
+        $body->metadata->responseInfo->developerMessage
+      ) );
+      return false;
+    }
     set_transient( $hash, $body->results, self::TRANSIENT_EXPIRES );
     set_transient( $lt_hash, $body->results, self::TRANSIENT_LT_EXPIRES );
     return $body->results;

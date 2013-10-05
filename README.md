@@ -152,13 +152,17 @@ At this time the We The People API is read-only, meaning your readers would need
 
 ## Changelog
 
+### Version 1.1
+
+* Ensure the plugin fails more gracefully in the event that the We The People site becomes unavailable (like during a government shutdown).
+
 ### Version 1.0
 
 * First public release of the plugin, coordinated with the National Day of Civic Hacking at the White House on June 1, 2013.
 
 ## Roadmap/To-do
 
-### Version 1.1
+### Version 1.2
 
 * Add CSS classes based on the topics related to a petition (`.topic-gun-control`, `.topic-taxes`, etc.) (#5)
 * Better petition searches on the back-end (#6)
