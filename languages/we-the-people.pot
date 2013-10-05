@@ -2,132 +2,144 @@
 # This file is distributed under the same license as the We The People package.
 msgid ""
 msgstr ""
-"Project-Id-Version: We The People 1.0\n"
+"Project-Id-Version: We The People 1.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/we-the-people\n"
-"POT-Creation-Date: 2013-06-01 16:12:46+00:00\n"
+"POT-Creation-Date: 2013-10-05 14:47-0500\n"
+"PO-Revision-Date: 2013-10-05 14:48-0500\n"
+"Last-Translator: Steve Grunwell <steve@stevegrunwell.com>\n"
+"Language-Team: Buckeye Interactive <wordpress@buckeyeinteractive.com>\n"
+"Language: en-US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
 
-#: js/tinymce/petition.php:24
-msgid "Insert petition"
-msgstr ""
-
-#: js/tinymce/petition.php:31
-msgid "Insert a petition"
-msgstr ""
-
-#: js/tinymce/petition.php:34 widget.php:55
-msgid "Petition ID:"
-msgstr ""
-
-#: js/tinymce/petition.php:37
-msgid "Don't know your petition ID? Search We The People:"
-msgstr ""
-
-#: js/tinymce/petition.php:38
-msgid "Search term:"
-msgstr ""
-
-#: js/tinymce/petition.php:39 widget.php:63
-msgid "e.g. Guns, taxes, etc."
-msgstr ""
-
-#: js/tinymce/petition.php:46
-msgid "Insert"
-msgstr ""
-
-#: js/tinymce/petition.php:47
-msgid "Cancel"
-msgstr ""
-
-#: templates/wtp-petition-widget.php:24 templates/wtp-petition.php:24
-msgid "Read the White House's response to this petition"
-msgstr ""
-
-#: templates/wtp-petition-widget.php:25 templates/wtp-petition.php:25
-msgid "The White House has issued a response to this petition."
-msgstr ""
-
-#: templates/wtp-petition-widget.php:32 templates/wtp-petition.php:32
-msgid "%d signatures still needed by %s"
-msgstr ""
-
-#: templates/wtp-petition-widget.php:33 templates/wtp-petition.php:33
-msgid "Sign this petition on We The People"
-msgstr ""
-
-#: templates/wtp-petition-widget.php:34 templates/wtp-petition.php:34
-msgid "Sign this petition"
-msgstr ""
-
-#: templates/wtp-petition.php:41
-msgid "This petition failed to reach %d signatures by its deadline of %s."
-msgstr ""
-
-#: we-the-people.php:97
+#: ../we-the-people.php:98
+#, php-format
 msgid "Class method %s does not exist"
 msgstr ""
 
-#: we-the-people.php:120
-msgid "Invalid petition object"
+#: ../we-the-people.php:172
+msgid "Dark"
 msgstr ""
 
-#: we-the-people.php:176
+#: ../we-the-people.php:197
 msgid "Invalid petition ID"
 msgstr ""
 
-#: we-the-people.php:182
+#: ../we-the-people.php:203
+#, php-format
 msgid "API response for petition %s came back empty"
 msgstr ""
 
-#: we-the-people.php:220
+#: ../we-the-people.php:236
+msgid "Unable to connect to We The People"
+msgstr ""
+
+#: ../we-the-people.php:245
+#, php-format
 msgid "%d signatures"
 msgstr ""
 
-#: we-the-people.php:310
+#: ../we-the-people.php:336
+#, php-format
 msgid "API endpoint returned an unexpected status code of \"%s: %s\""
 msgstr ""
 
-#: we-the-people.php:339
+#: ../we-the-people.php:346
+#, php-format
+msgid "The We The People site is currently unavailable: %s"
+msgstr ""
+
+#: ../we-the-people.php:373
 msgid "(less)"
 msgstr ""
 
-#: we-the-people.php:340
+#: ../we-the-people.php:374
 msgid "(more)"
 msgstr ""
 
-#: widget.php:17
+#: ../widget.php:17
 msgid "WTP Petition"
 msgstr ""
 
-#: widget.php:60
+#: ../widget.php:55 ../js/tinymce/petition.php:34
+msgid "Petition ID:"
+msgstr ""
+
+#: ../widget.php:60
 msgid "Don't know your petition ID?"
 msgstr ""
 
-#: widget.php:62
+#: ../widget.php:62
 msgid "Search petitions:"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "We The People"
+#: ../widget.php:63 ../js/tinymce/petition.php:39
+msgid "e.g. Guns, taxes, etc."
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://petitions.whitehouse.gov/"
+#: ../js/tinymce/petition.php:24
+msgid "Insert petition"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "Display White House petitions on your WordPress site"
+#: ../js/tinymce/petition.php:31
+msgid "Insert a petition"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Buckeye Interactive"
+#: ../js/tinymce/petition.php:37
+msgid "Don't know your petition ID? Search We The People:"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "http://www.buckeyeinteractive.com"
+#: ../js/tinymce/petition.php:38
+msgid "Search term:"
+msgstr ""
+
+#: ../js/tinymce/petition.php:46
+msgid "Insert"
+msgstr ""
+
+#: ../js/tinymce/petition.php:47
+msgid "Cancel"
+msgstr ""
+
+#: ../templates/wtp-petition-error.php:14
+msgid "Petition unavailable"
+msgstr ""
+
+#: ../templates/wtp-petition-error.php:24
+msgid ""
+"This petition is currently unavailable due to an error retrieving data from "
+"<a href=\"http://petitions.whitehouse.gov/\" rel=\"external\">We The People</"
+"a>."
+msgstr ""
+
+#: ../templates/wtp-petition-widget.php:24 ../templates/wtp-petition.php:24
+msgid "Read the White House's response to this petition"
+msgstr ""
+
+#: ../templates/wtp-petition-widget.php:25 ../templates/wtp-petition.php:25
+msgid "The White House has issued a response to this petition."
+msgstr ""
+
+#: ../templates/wtp-petition-widget.php:32 ../templates/wtp-petition.php:32
+#, php-format
+msgid "%d signatures still needed by %s"
+msgstr ""
+
+#: ../templates/wtp-petition-widget.php:33 ../templates/wtp-petition.php:33
+msgid "Sign this petition on We The People"
+msgstr ""
+
+#: ../templates/wtp-petition-widget.php:34 ../templates/wtp-petition.php:34
+msgid "Sign this petition"
+msgstr ""
+
+#: ../templates/wtp-petition.php:41
+#, php-format
+msgid "This petition failed to reach %d signatures by its deadline of %s."
 msgstr ""

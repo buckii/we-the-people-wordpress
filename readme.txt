@@ -3,8 +3,8 @@ Contributors: BuckeyeInteractive, stevegrunwell
 Donate link: http://www.buckeyeinteractive.com/donations
 Tags: We The People, petition, democracy, White House, America, Government
 Requires at least: 3.5.1
-Tested up to: 3.5.1
-Stable tag: 1.0
+Tested up to: 3.6.1
+Stable tag: 1.1
 License: GPLv2 or later
 
 Easily embed White House petitions from We The People into your WordPress site via shortcodes and widgets.
@@ -96,6 +96,9 @@ At this time the We The People API is read-only, meaning your readers would need
 
 
 == Changelog ==
+
+= 1.1 =
+* Make sure the petitions won't be totally broken in the event that We The People becomes unavailable
 
 = 1.0 =
 * First public version of the plugin

@@ -20,12 +20,14 @@ class We_The_People_Entity {
    * @return void
    * @since 1.1
    */
-  public function __construct( $api_response ) {
+  public function __construct( $api_response=null ) {
 
     // Assign the methods from the StdClass object to this object
-    $props = get_object_vars( $api_response );
-    foreach ( $props as $k=>$v ) {
-      $this->$k = $v;
+    if ( $api_response ) {
+      $props = get_object_vars( $api_response );
+      foreach ( $props as $k=>$v ) {
+        $this->$k = $v;
+      }
     }
 
     $this->css_classes = array();

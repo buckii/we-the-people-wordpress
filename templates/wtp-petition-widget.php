@@ -15,7 +15,7 @@ extract( $widget_args );
 ?>
 
 <div id="wtp-petition-<?php echo $petition->id; ?>" <?php $petition->petition_class( 'wtp-petition clearfix' ); ?>>
-  <?php echo $before_title; ?><?php echo $petition->title; ?><?php echo $after_title; ?>
+  <?php echo $before_title . $petition->title . $after_title; ?>
   <blockquote><?php echo apply_filters( 'wethepeople_petition_body', $petition->body ); ?></blockquote>
 
 <?php if ( $petition->status == 'responded' ) : ?>
