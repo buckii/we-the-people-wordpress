@@ -33,13 +33,17 @@ if ( file_exists( $config ) ) {
       <div id="tab-basic" class="tab">
         <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
         <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
+        <label for="petition-enable-signature-form" class="inline">
+          <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
+          <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
+        </label>
 
         <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
         <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
         <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
         <div id="search-results" class="wtp-search-results"></div>
+        
       </div><!-- #tab-basic -->
-
     </div><!-- .wrap -->
 
     <div class="mceActionPanel">
@@ -63,7 +67,8 @@ if ( file_exists( $config ) ) {
     },
     insert: function insertPetition() {
       var shortcode_atts = {
-        id: jQuery( '#petition-id' ).val()
+        id: jQuery( '#petition-id' ).val(),
+        signature: ( jQuery( '#petition-enable-signature-form' ).is( ':checked' ) ? '1' : '0' )
       },
       shortcode = '[<?php echo apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' ); ?>',
       prop;

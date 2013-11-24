@@ -24,7 +24,7 @@
         ed.windowManager.open({
           file: url + '/petition.php',
           width: 500,
-          height: 430,
+          height: 460,
           inline: true
         });
       });
