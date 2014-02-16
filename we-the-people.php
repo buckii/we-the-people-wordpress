@@ -15,6 +15,7 @@
  * @author Buckeye Interactive
  */
 
+require_once dirname( __FILE__ ) . '/plugin-options.php';
 require_once dirname( __FILE__ ) . '/widget.php';
 require_once dirname( __FILE__ ) . '/wtp-entity.class.php';
 
