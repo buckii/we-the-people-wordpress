@@ -97,7 +97,12 @@ class WeThePeople_Plugin_Options {
    * Print instructions before the fields for the wethepeople_options_api settings section
    */
   public function print_api_section_info() {
-    printf( '<p>%s</p>', __( 'In order for guests to sign petitions from your site you\'ll need to apply for an API key through <a href="#" rel="external" target="_blank">We The People</a> website.', 'we-the-people' ) );
+    printf( '<p>%s</p>',
+      sprintf(
+        __( 'In order for guests to sign petitions from your site you\'ll need to apply for an API key through <a href="%s" rel="external" target="_blank">We The People</a> website.', 'we-the-people' ),
+        WeThePeople_Plugin::API_KEY_REGISTRATION_URL
+      )
+    );
   }
 
 }

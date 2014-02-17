@@ -27,6 +27,11 @@ class WeThePeople_Plugin {
   const API_ENDPOINT = 'https://api.whitehouse.gov/v1/';
 
   /**
+   * The URL for API key registration
+   */
+  const API_KEY_REGISTRATION_URL = '#';
+
+  /**
    * The current plugin version
    */
   const PLUGIN_VERSION = '1.0';
@@ -149,6 +154,7 @@ class WeThePeople_Plugin {
 
     // We need to make sure these are available to the template when we load it
     $widget_args = ( isset( $data['widget_args'] ) ? $data['widget_args'] : array() );
+    $signature = ( isset( $data['signature'] ) ? $data['signature'] : false );
 
     // Echo or load the file in the output buffer
     if ( isset( $data['echo'] ) && $data['echo'] ) {
@@ -172,7 +178,8 @@ class WeThePeople_Plugin {
    */
   public function petition_shortcode( $atts, $content='' ) {
     $defaults = array(
-      'id' => false
+      'id' => false,
+      'signature' => false
     );
     $atts = shortcode_atts( $defaults, $atts );
 
@@ -320,6 +327,7 @@ class WeThePeople_Plugin {
       $this->error( sprintf( __( 'API endpoint returned an unexpected status code of "%s: %s"', 'we-the-people' ),
         $response['response']['code'], $response['response']['message']
       ) );
+      return false;
     }
 
     // Save the response body as a transient
@@ -407,3 +415,52 @@ function wethepeople_init() {
   return true;
 }
 add_action( 'init', 'wethepeople_init' );
+
+/**
+ * Load the We The People petition signature form
+ * @global $petition
+ * @param str $petition_id The petition ID
+ * @return str
+ */
+function wethepeople_get_signature_form( $petition_id=false ) {
+  global $petition;
+
+  // Don't load the form if an API key hasn't been provided
+  if ( ! wethepeople_get_option( 'api_key' ) ) {
+    if ( current_user_can( 'manage_options' ) ) {
+      return sprintf( '<p class="wtp-error">%s</p>',
+        sprintf(
+          __( 'In order to sign petitions you must <a href="%s" rel="external">register for an API key</a> with We The People.', 'we-the-people' ),
+          self::API_KEY_REGISTRATION_URL
+        )
+      );
+
+    } else {
+      return;
+    }
+    return ( current_user_can( 'manage_options' ) ? sprintf( '<p class="wtp-error">%s</p>', __( ) ) : '' );
+  }
+
+  // Default the $petition->id
+  if ( ! $petition_id ) {
+    $petition_id = $petition->id;
+  }
+
+  // Locate templates
+  if ( ! $template_file = locate_template( array( 'wtp-signature-form.php' ), false, false ) ) {
+    $template_file = dirname( __FILE__ ) . '/templates/wtp-signature-form.php';
+  }
+  ob_start();
+  include $template_file;
+  $form = ob_get_contents();
+  ob_end_clean();
+
+  return $form;
+}
+
+/**
+ * Shortcut for `echo wethpeople_get_signature_form( $petition_id )`
+ */
+function wethepeople_signature_form( $petition_id=false ) {
+  echo wethepeople_get_signature_form( $petition_id );
+}

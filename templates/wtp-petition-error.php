@@ -21,5 +21,5 @@ $heading = __( 'Petition unavailable', 'we-the-people' );
 <?php else : ?>
   <h2 class="petition-title"><?php echo $heading; ?></h2>
 <?php endif; ?>
-  <p><?php _e( 'This petition is currently unavailable due to an error retrieving data from <a href="http://petitions.whitehouse.gov/" rel="external">We The People</a>.', 'we-the-people' ); ?></p>
+  <p class="wtp-error"><?php _e( 'This petition is currently unavailable due to an error retrieving data from <a href="http://petitions.whitehouse.gov/" rel="external">We The People</a>.', 'we-the-people' ); ?></p>
 </div><!-- .wtp-petition-error -->

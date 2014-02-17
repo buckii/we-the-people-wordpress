@@ -35,6 +35,10 @@ add_filter( 'wethepeople_petition_body', 'wptexturize' );
     </a>
   </p>
 
+  <?php if ( $signature ) : ?>
+    <?php wethepeople_signature_form( $petition->id ); ?>
+  <?php endif; ?>
+
 <?php else : ?>
 
   <p class="petition-status closed">
