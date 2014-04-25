@@ -53,6 +53,8 @@ function wethepeople_get_signature_form( $petition_id = false ) {
 
 /**
  * Shortcut for `echo wethpeople_get_signature_form( $petition_id )`
+ *
+ * @since 2.0
  */
 function wethepeople_signature_form( $petition_id = false ) {
   echo wethepeople_get_signature_form( $petition_id );

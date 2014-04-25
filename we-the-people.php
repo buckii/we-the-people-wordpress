@@ -120,6 +120,8 @@ class WeThePeople_Plugin {
    * Put the plugin URL in a global JS variable so it's available for our TinyMCE widget
    *
    * @uses plugins_url()
+   *
+   * @since 2.0
    */
   public function add_plugin_url_to_global_variable() {
     printf( '<script type="text/javascript">var WeThePeople = { plugin_url: "%s" }</script>' . PHP_EOL, plugins_url( '/', __FILE__ ) );
@@ -227,6 +229,8 @@ class WeThePeople_Plugin {
    * @return str
    *
    * @uses wethepeople_get_option()
+   *
+   * @since 2.0
    */
   public function get_api_key() {
     if ( $this->api_key === null ) {
@@ -276,6 +280,8 @@ class WeThePeople_Plugin {
    *
    * @param array $vars Registered query vars
    * @return array
+   *
+   * @since 2.0
    */
   public function register_query_vars( $vars ) {
     $vars[] = self::SIGNATURE_STATUS_QUERY_VAR;
@@ -300,6 +306,8 @@ class WeThePeople_Plugin {
 
   /**
    * Sign a petition through the WTP API
+   *
+   * @since 2.0
    */
   public function sign_petition() {
     try {
@@ -409,7 +417,7 @@ class WeThePeople_Plugin {
         echo json_encode( $response );
         break;
     }
-    die(); // Necessary to close the Ajax connection
+    exit;
   }
 
   /**

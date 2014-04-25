@@ -15,6 +15,8 @@ class WeThePeople_Plugin_Options {
 
   /**
    * Register our options page
+   *
+   * @since 2.0
    */
   public function __construct() {
     if ( is_admin() && ! defined( 'WTP_API_KEY' ) ) {
@@ -25,6 +27,8 @@ class WeThePeople_Plugin_Options {
 
   /**
    * Register the theme options page within WordPress
+   *
+   * @since 2.0
    */
   public function add_options_page() {
     add_plugins_page(
@@ -38,6 +42,8 @@ class WeThePeople_Plugin_Options {
 
   /**
    * Generate the options page markup
+   *
+   * @since 2.0
    */
   public function create_options_page() {
     print '<div class="wrap">';
@@ -56,6 +62,8 @@ class WeThePeople_Plugin_Options {
 
   /**
    * Initialize the options page
+   *
+   * @since 2.0
    */
   public function page_init() {
     register_setting( 'wethepeople_options', 'wethepeople_options' );
@@ -85,8 +93,10 @@ class WeThePeople_Plugin_Options {
    * name - The key within the OPTION_NAME options array
    *
    * @param array $args
+   *
+   * @since 2.0
    */
-  public function create_textfield( $args=array() ) {
+  public function create_textfield( $args = array() ) {
     $settings = get_option( self::OPTION_NAME );
     $classes = ( isset( $args['code'] ) && $args['code'] ? 'regular-text code' : '' );
     $default = ( isset( $args['default'] ) ? $args['default'] : '' );
@@ -95,6 +105,8 @@ class WeThePeople_Plugin_Options {
 
   /**
    * Print instructions before the fields for the wethepeople_options_api settings section
+   *
+   * @since 2.0
    */
   public function print_api_section_info() {
     printf( '<p>%s</p>',
@@ -109,11 +121,14 @@ class WeThePeople_Plugin_Options {
 
 /**
  * Get an option from our theme options array
+ *
  * @param str $key The option key
  * @param str $default The default value to return (if $key is not null)
  * @return mixed The value of $key if $key is defined, otherwise an array of all the theme options
+ *
+ * @since 2.0
  */
-function wethepeople_get_option( $key=null, $default=null ) {
+function wethepeople_get_option( $key = null, $default = null ) {
   $return = $options = get_option( WeThePeople_Plugin_Options::OPTION_NAME );
   if ( $key ) {
     $return = ( isset( $options[ $key ] ) ? $options[ $key ] : $default );

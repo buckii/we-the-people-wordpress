@@ -10,22 +10,27 @@ class WeThePeople_Plugin_Widget extends WP_Widget {
 
   /**
    * Widget constructor
+   *
    * @see WP_Widget::__construct()
+   *
    * @since 1.0
    */
   public function __construct() {
     parent::__construct( 'wtp', __( 'WTP Petition', 'we-the-people' ),
-      array( 'description' => 'Embed a petition from We The People', 'we-the-people' ),
+      array( 'description' => __( 'Embed a petition from We The People', 'we-the-people' ) ),
       array( 'width' => 350 )
     );
   }
 
   /**
    * Front-end display of widget.
+   *
    * @param array $args Widget arguments.
    * @param array $instance Saved values from database.
    * @return void
+   *
    * @see WP_Widget::widget()
+   *
    * @since 1.0
    */
   public function widget( $args, $instance ) {
@@ -44,9 +49,12 @@ class WeThePeople_Plugin_Widget extends WP_Widget {
 
   /**
    * Back-end widget form.
+   *
    * @param array $instance Previously saved values from database.
    * @return void
+   *
    * @see WP_Widget::form()
+   *
    * @since 1.0
    */
   public function form( $instance ) {
