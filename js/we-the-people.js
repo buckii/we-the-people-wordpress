@@ -10,10 +10,10 @@
 jQuery( function ( $ ) {
   "use strict";
 
-  /**
-   * Truncate an embedded petition to the first paragraph and hide the others behind an a.more
-   */
-  $('body').find( '.wtp-petition blockquote' ).each( function () {
+  var body = $('body');
+
+  /** Truncate an embedded petition to the first paragraph and hide the others behind an a.more */
+  body.find( '.wtp-petition blockquote' ).each( function () {
     var self = $(this);
     if ( self.find( 'p' ).length > 1 ) {
       self.find( 'p:not(:first)' ).wrapAll( '<div class="extended" />' );
@@ -21,10 +21,8 @@ jQuery( function ( $ ) {
     }
   });
 
-  /**
-   * Scripting for the more/less toggle
-   */
-  $('body').on( 'click', '.wtp-petition a.toggle', function ( e ) {
+  /** Scripting for the more/less toggle */
+  body.on( 'click', '.wtp-petition a.toggle', function ( e ) {
     var self = $(this),
     bq = self.parents( 'blockquote' );
     e.preventDefault();
@@ -33,6 +31,26 @@ jQuery( function ( $ ) {
       self.text( ( self.hasClass( 'more' ) ? WeThePeople.i18n.less : WeThePeople.i18n.more ) ).toggleClass( 'more less' );
     });
     return false;
+  });
+
+  /** Ajax-powered signature forms */
+  body.on( 'submit', 'form.wtp-petitions-signature', function ( e ) {
+    var form = $(this),
+    data = form.serializeArray();
+    e.preventDefault();
+
+    // Add an additional key that tells our handler we're *actually* Ajax
+    data.push( { name: 'actually_ajax', value: true } );
+
+    $.post( WeThePeople.ajaxurl, data, function ( response ) {
+      if ( response === WeThePeople.signatureStatus.success ) {
+        form.fadeOut( 200, function () {
+          form.text( WeThePeople.i18n.signatureSuccess ).fadeIn( 200 );
+        });
+      } else {
+        form.before( '<div class="wtp-signature-error"><p>' + WeThePeople.i18n.signatureError + '</p></div>' );
+      }
+    });
   });
 
 });

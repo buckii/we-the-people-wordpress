@@ -41,7 +41,7 @@ function wethepeople_get_signature_form( $petition_id = false ) {
 
   // Locate templates
   if ( ! $template_file = locate_template( array( 'wtp-signature-form.php' ), false, false ) ) {
-    $template_file = dirname( __FILE__ ) . '/templates/wtp-signature-form.php';
+    $template_file = $GLOBALS['we-the-people']->template_path . 'wtp-signature-form.php';
   }
   ob_start();
   include $template_file;
@@ -54,6 +54,6 @@ function wethepeople_get_signature_form( $petition_id = false ) {
 /**
  * Shortcut for `echo wethpeople_get_signature_form( $petition_id )`
  */
-function wethepeople_signature_form( $petition_id=false ) {
+function wethepeople_signature_form( $petition_id = false ) {
   echo wethepeople_get_signature_form( $petition_id );
 }

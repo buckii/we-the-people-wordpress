@@ -10,32 +10,47 @@
 
 $current_user = wp_get_current_user();
 
-?>
+if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeople_Plugin::SIGNATURE_STATUS_CODE_SUCCESS ) : ?>
 
-<form method="post" action="<?php echo admin_url( 'admin-ajax.php' ); ?>" id="wtp-petition-signature-<?php echo $petition_id; ?>" class="wtp-petitions-signature">
-  <h3><?php _e( 'Sign this petition', 'we-the-people' ); ?></h3>
-  <ul class="wtp-petition-signature-fields">
-    <li>
-      <label for="wtp-petition-<?php echo $petition_id; ?>-first_name"><?php _e( 'First name', 'we-the-people' ); ?></label>
-      <input name="first_name" id="wtp-petition-<?php echo $petition_id; ?>-first_name" type="text" value="<?php echo $current_user->user_firstname; ?>" />
-    </li>
-    <li>
-      <label for="wtp-petition-<?php echo $petition_id; ?>-last_name"><?php _e( 'Last name', 'we-the-people' ); ?></label>
-      <input name="last_name" id="wtp-petition-<?php echo $petition_id; ?>-last_name" type="text" value="<?php echo $current_user->user_lastname; ?>" />
-    </li>
-    <li>
-      <label for="wtp-petition-<?php echo $petition_id; ?>-email"><?php _e( 'Email address', 'we-the-people' ); ?></label>
-      <input name="email" id="wtp-petition-<?php echo $petition_id; ?>-email" type="email" value="<?php echo $current_user->user_email; ?>" />
-    </li>
-    <li>
-      <label for="wtp-petition-<?php echo $petition_id; ?>-zip"><?php _e( 'Postal code', 'we-the-people' ); ?></label>
-      <input name="zip" id="wtp-petition-<?php echo $petition_id; ?>-zip" type="text" value="" />
-    </li>
+  <p>Great success!</p>
 
-  </ul>
-  <p class="form-submit">
-    <input name="submit" type="submit" value="<?php _e( 'Sign petition', 'we-the-people' ); ?>" />
-    <input name="petition_id" type="hidden" value="<?php echo $petition_id; ?>" />
-    <input name="action" type="hidden" value="wtp_petition_signature" />
-  </p>
-</form><!-- #wtp-petition-signature-<?php echo $petition->id; ?> -->
+<?php else : ?>
+
+  <?php if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeople_Plugin::SIGNATURE_STATUS_CODE_ERROR ) : ?>
+
+    <div class="wtp-signature-error">
+      <p><?php _e( 'There was a problem submitting your signature for this petition!', 'we-the-people' ); ?></p>
+    </div><!-- .wtp-signature-error -->
+
+  <?php endif; ?>
+
+  <form method="post" action="<?php echo admin_url( 'admin-ajax.php' ); ?>" id="wtp-petition-signature-<?php echo $petition_id; ?>" class="wtp-petitions-signature">
+    <h3><?php _e( 'Sign this petition', 'we-the-people' ); ?></h3>
+
+    <ul class="wtp-petition-signature-fields">
+      <li>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-first_name"><?php _e( 'First name', 'we-the-people' ); ?></label>
+        <input name="first_name" id="wtp-petition-<?php echo $petition_id; ?>-first_name" type="text" value="<?php echo $current_user->user_firstname; ?>" required />
+      </li>
+      <li>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-last_name"><?php _e( 'Last name', 'we-the-people' ); ?></label>
+        <input name="last_name" id="wtp-petition-<?php echo $petition_id; ?>-last_name" type="text" value="<?php echo $current_user->user_lastname; ?>" required />
+      </li>
+      <li>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-email"><?php _e( 'Email address', 'we-the-people' ); ?></label>
+        <input name="email" id="wtp-petition-<?php echo $petition_id; ?>-email" type="email" value="<?php echo $current_user->user_email; ?>" required />
+      </li>
+      <li>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-zip"><?php _e( 'Postal code', 'we-the-people' ); ?></label>
+        <input name="zip" id="wtp-petition-<?php echo $petition_id; ?>-zip" type="text" value="" required />
+      </li>
+    </ul>
+
+    <p class="form-submit">
+      <input name="submit" type="submit" value="<?php _e( 'Sign petition', 'we-the-people' ); ?>" />
+      <input name="petition_id" type="hidden" value="<?php echo $petition_id; ?>" />
+      <input name="action" type="hidden" value="wtp_petition_signature" />
+    </p>
+  </form><!-- #wtp-petition-signature-<?php echo $petition->id; ?> -->
+
+<?php endif; ?>

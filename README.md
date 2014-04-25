@@ -5,6 +5,17 @@ In May 2013 the White House released an API for We The People, a petition applic
 
 This plugin allows WordPress site owners to search and embed petitions from We The People into WordPress. Perhaps you're writing an opinion piece on a petition and want real-time statistics on signatures and any response from the White House. Maybe you're a supporter of a particular issue and want to feature it on your sidebar to help promote awareness. The ease of WordPress with the totally customizable templates of the We The People plugin give you the power to share what's important to you.
 
+## API keys
+
+Version 2.0 of the plugin introduced the ability to sign petitions via the We The People Write API. In order to enable this feature within the plugin, it's necessary to [acquire an API key from We The People](), then enter in the We The People WordPress settings page (Plugins > We The People). Alternatively, you may add the API key to your wp-config.php file by adding the following code above the "stop editing" comment:
+
+```php
+// We The People API
+define('WTP_API_KEY', 'your-api-key');
+```
+
+**Note:** If you go the wp-config.php route, the plugin settings page will disappear as the API key is the only plugin option at this time.
+
 ## Using the plugin
 
 ### Shortcodes

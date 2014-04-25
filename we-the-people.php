@@ -16,6 +16,7 @@
  */
 
 require_once dirname( __FILE__ ) . '/inc/plugin-options.php';
+require_once dirname( __FILE__ ) . '/inc/template-tags.php';
 require_once dirname( __FILE__ ) . '/inc/widget.php';
 require_once dirname( __FILE__ ) . '/inc/wtp-entity.class.php';
 
@@ -37,6 +38,17 @@ class WeThePeople_Plugin {
   const PLUGIN_VERSION = '2.0';
 
   /**
+   * Codes to indicate success/errors with signature requests
+   */
+  const SIGNATURE_STATUS_CODE_ERROR = 'err';
+  const SIGNATURE_STATUS_CODE_SUCCESS = 'success';
+
+  /**
+   * The query var used to indicate whether or not a signature was submitted successfully
+   */
+  const SIGNATURE_STATUS_QUERY_VAR = 'wtp-signature-%s';
+
+  /**
    * The amount of time (in seconds) transient data should live before it's purged
    */
   const TRANSIENT_EXPIRES = MINUTE_IN_SECONDS;
@@ -47,9 +59,19 @@ class WeThePeople_Plugin {
   const TRANSIENT_LT_EXPIRES = DAY_IN_SECONDS;
 
   /**
+   * @var str $api_key The We The People API key
+   */
+  public $api_key;
+
+  /**
    * @var str $shortcode_name The name of the shortcode to register (defaults to 'wtp-petition')
    */
   public $shortcode_name;
+
+  /**
+   * @var str $templates_path The system path to the plugins' templates/ directory
+   */
+  public $template_path;
 
   /**
    * Class constructor
@@ -63,6 +85,8 @@ class WeThePeople_Plugin {
    * @since 1.0
    */
   public function __construct() {
+    $this->template_path = trailingslashit( dirname( __FILE__ ) ) . 'templates/';
+
     // Register our shortcode
     $this->shortcode_name = apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' );
     add_shortcode( $this->shortcode_name, array( &$this, 'petition_shortcode' ) );
@@ -80,8 +104,14 @@ class WeThePeople_Plugin {
       add_filter( 'mce_buttons_2', array( $this, 'add_tinymce_buttons' ) );
     }
 
+    // Query vars
+    add_filter( 'query_vars', array( &$this, 'register_query_vars' ) );
+
     // Ajax hooks
     add_action( 'wp_ajax_wtp_petition_search', array( &$this, 'tinymce_ajax_petition_search' ) );
+
+    add_action( 'wp_ajax_wtp_petition_signature', array( &$this, 'sign_petition' ) );
+    add_action( 'wp_ajax_nopriv_wtp_petition_signature', array( &$this, 'sign_petition' ) );
   }
 
   /**
@@ -181,6 +211,24 @@ class WeThePeople_Plugin {
   }
 
   /**
+   * Retrieve the We The People API key
+   *
+   * @return str
+   *
+   * @uses wethepeople_get_option()
+   */
+  public function get_api_key() {
+    if ( $this->api_key === null ) {
+      if ( defined( 'WTP_API_KEY' ) && WTP_API_KEY ) {
+        $this->api_key = WTP_API_KEY;
+      } else {
+        $this->api_key = wethepeople_get_option( 'api_key', false );
+      }
+    }
+    return $this->api_key;
+  }
+
+  /**
    * Handler for the [wtp-petition] shortcode
    *
    * @param array $atts Attributes passed in the shortcode call
@@ -213,6 +261,17 @@ class WeThePeople_Plugin {
   }
 
   /**
+   * Register query vars within WordPress
+   *
+   * @param array $vars Registered query vars
+   * @return array
+   */
+  public function register_query_vars( $vars ) {
+    $vars[] = self::SIGNATURE_STATUS_QUERY_VAR;
+    return $vars;
+  }
+
+  /**
    * Register our TinyMCE plugin
    * This should be called via the 'mce_external_plugins' filter
    *
@@ -225,6 +284,82 @@ class WeThePeople_Plugin {
   public function register_tinymce_plugin( $plugins ) {
     $plugins['wethepeople'] = plugins_url( 'js/tinymce/petition.js?' . self::PLUGIN_VERSION, __FILE__ );
     return $plugins;
+  }
+
+  /**
+   * Sign a petition through the WTP API
+   */
+  public function sign_petition() {
+    try {
+
+      // An API key is required to sign petitions
+      if ( ! $api_key = $this->get_api_key() ) {
+        throw new Exception( __( 'A valid API key is required to sign petitions', 'we-the-people' ) );
+      }
+
+      // We can't do anything without a petition ID
+      if ( ! isset( $_POST['petition_id'] ) || ! $_POST['petition_id'] ) {
+        throw new Exception( __( 'A petition ID is required', 'we-the-people' ) );
+      }
+
+      // Required fields
+      if ( ! isset( $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['zip'] ) ) {
+        throw new Exception( __( 'Required fields are missing from the $_POST object', 'we-the-people' ) );
+      }
+
+      // Build our request body
+      $data = array(
+        'petition_id' => preg_replace( '/[^A-Z0-9]/i', '', $_POST['petition_id'] ),
+        'first_name' => filter_var( $_POST['first_name'], FILTER_SANITIZE_STRING ),
+        'last_name' => filter_var( $_POST['last_name'], FILTER_SANITIZE_STRING ),
+        'email' => filter_var( $_POST['email'], FILTER_SANITIZE_EMAIL ),
+        'zip' => preg_replace( '/[^0-9-]/i', '', $_POST['zip'] )
+      );
+
+      foreach ( $data as $k => $v ) {
+        if ( ! $v ) {
+          throw new Exception( sprintf( __( 'Field %s is required', 'we-the-people' ), $k ) );
+        }
+      }
+
+      // Assemble our request
+      $request_uri = trailingslashit( self::API_ENDPOINT ) . 'signatures?api_key=' . $api_key;
+      $params = array(
+        'headers' => array(
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/json',
+        ),
+        'body' => json_encode( $data )
+      );
+
+      $response = wp_remote_post( $request_uri, $params );
+
+      // Check it for errors
+      if ( is_wp_error( $response ) ) {
+        throw new Exception( $response->get_error_message() );
+
+      } elseif ( isset( $response['response']['code'] ) && $response['response']['code'] != 200 ) {
+        throw new Exception( sprintf( __( 'API endpoint returned an unexpected status code of "%s: %s"', 'we-the-people' ),
+          $response['response']['code'], $response['response']['message']
+        ) );
+      }
+
+      $status = self::SIGNATURE_STATUS_CODE_SUCCESS;
+
+    } catch ( Exception $e ) {
+      $this->error( sprintf( __( 'There was a problem signing the petition: %s', 'we-the-people' ), $e->getMessage() ) );
+      $status = self::SIGNATURE_STATUS_CODE_ERROR;
+    }
+
+    // Issue a response
+    if ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_POST['actually_ajax'] ) ) {
+      print $status;
+
+    // We're actually on admin-ajax.php and it's not an Ajax call - send the user back
+    } else {
+      wp_safe_redirect( add_query_arg( self::SIGNATURE_STATUS_QUERY_VAR, $status, wp_get_referer() ) );
+    }
+    exit;
   }
 
   /**
@@ -391,9 +526,16 @@ class WeThePeople_Plugin {
 
     wp_register_script( 'we-the-people', plugins_url( 'js/we-the-people.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
     $localization = array(
+      'ajaxurl' => admin_url( 'admin-ajax.php' ),
       'i18n' => array(
         'less' => __( '(less)', 'we-the-people' ),
-        'more' => __( '(more)', 'we-the-people' )
+        'more' => __( '(more)', 'we-the-people' ),
+        'signatureError' => __( 'There was an error submitting your signature for this petition!', 'we-the-people' ),
+        'signatureSuccess' => __( 'Your signature has been submitted! You should receive a confirmation email from We The People shortly!', 'we-the-people' )
+      ),
+      'signatureStatus' => array(
+        'success' => self::SIGNATURE_STATUS_CODE_SUCCESS,
+        'error' => self::SIGNATURE_STATUS_CODE_ERROR
       )
     );
     wp_localize_script( 'we-the-people', 'WeThePeople', $localization );

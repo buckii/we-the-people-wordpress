@@ -17,7 +17,7 @@ class WeThePeople_Plugin_Options {
    * Register our options page
    */
   public function __construct() {
-    if ( is_admin() ) {
+    if ( is_admin() && ! defined( 'WTP_API_KEY' ) ) {
       add_action( 'admin_menu', array( &$this, 'add_options_page' ) );
       add_action( 'admin_init', array( &$this, 'page_init' ) );
     }
