@@ -429,7 +429,7 @@ class WeThePeople_Plugin {
    *
    * @since 1.0
    */
-  protected function api_index_action( $args=array() ) {
+  protected function api_index_action( $args = array() ) {
     return $this->make_api_call( sprintf( 'petitions.json?%s', http_build_query( $args ) ) );
   }
 
@@ -561,7 +561,7 @@ class WeThePeople_Plugin {
     wp_localize_script( 'we-the-people', 'WeThePeople', $localization );
     wp_register_script( 'we-the-people-admin', plugins_url( 'assets/dist/js/admin.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
 
-    if ( ! is_admin() ) {
+    if ( ! is_admin() && apply_filters( 'wethepeople_load_scripts', true ) ) {
       wp_enqueue_script( 'we-the-people' );
     } elseif ( is_admin() && $pagenow == 'widgets.php' ) {
       wp_enqueue_script( 'we-the-people-admin' );
@@ -587,7 +587,7 @@ class WeThePeople_Plugin {
     wp_register_style( 'we-the-people', plugins_url( 'assets/dist/css/we-the-people.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
     wp_register_style( 'we-the-people-admin', plugins_url( 'assets/dist/css/admin.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
 
-    if ( ! is_admin() ) {
+    if ( ! is_admin() && apply_filters( 'wethepeople_load_styles', true ) ) {
       wp_enqueue_style( 'we-the-people' );
     } elseif ( is_admin() && $pagenow == 'widgets.php' ) {
       wp_enqueue_style( 'we-the-people-admin' );
