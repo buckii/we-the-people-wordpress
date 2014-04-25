@@ -14,6 +14,7 @@
 
     /**
      * Initialize the TinyMCE plugin
+     *
      * @param object ed The TinyMCE editor instance
      * @param str url The URL of this directory
      * @return void
@@ -22,7 +23,7 @@
       // Register our weThePeopleDialog command (which we'll trigger with the button later)
       ed.addCommand( 'weThePeopleDialog', function () {
         ed.windowManager.open({
-          file: url + '/petition.php',
+          file: WeThePeople.plugin_url + 'inc/tinymce-plugin.php',
           width: 500,
           height: 460,
           inline: true
@@ -33,12 +34,13 @@
       ed.addButton( 'wethepeople', {
         cmd: 'weThePeopleDialog',
         title : 'Insert We The People petition',
-        image : url + '/insert-petition.png'
+        image : WeThePeople.plugin_url + 'assets/img/insert-petition.png'
       });
     },
 
     /**
      * Set the plugin information
+     *
      * @return object
      */
     getInfo : function() {
@@ -47,7 +49,7 @@
         author : 'Buckeye Interactive',
         authorurl : 'http://www.buckeyeinteractive.com',
         infourl : 'http://wordpress.org/plugins/we-the-people/',
-        version : '1.0'
+        version : '2.0'
       };
     }
 

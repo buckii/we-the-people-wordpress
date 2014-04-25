@@ -1,0 +1,65 @@
+/**
+ * Styles for the We The People plugin
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+
+.wtp-petition {
+  .petition-status {
+    font-size: 1.1em;
+    font-weight: bold;
+    &.closed {
+      font-size: 1em;
+      font-weight: normal;
+      font-style: italic;
+    }
+  }
+  blockquote {
+    .extended {
+      display: none;
+    }
+    .toggle {
+      font-size: .85em;
+    }
+  }
+  .sign-btn {
+    float: right;
+    .widget-wtp & {
+      float: none;
+      display: block;
+    }
+  }
+
+  // clearfix
+  zoom: 1;
+  &:before, &:after {
+    content: '';
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@media print {
+  .wtp-petition {
+    .toggle-btn {
+      display: none !important;
+    }
+    blockquote {
+      .extended {
+        display: block;
+      }
+    }
+    .sign-btn {
+      float: none;
+      display: block;
+      &:after {
+        content: attr(href);
+        display: block;
+        font-size: 1em;
+      }
+    }
+  }
+}

@@ -1,3 +1,6 @@
 # Keep these files out of the repository
-*.DS_Store
-*Thumbs.db
+.sass-cache
+node_modules
+
+.DS_Store
+Thumbs.db

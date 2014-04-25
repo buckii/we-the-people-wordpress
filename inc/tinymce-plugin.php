@@ -22,8 +22,7 @@ if ( file_exists( $config ) ) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
-<link href="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>" type="text/css" rel="stylesheet" media="screen" />
-<link href="../../css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
+<link href="../assets/dist/css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 </head>
 
 <body id="wtp-petition" class="wp-core-ui">
@@ -42,7 +41,7 @@ if ( file_exists( $config ) ) {
         <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
         <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
         <div id="search-results" class="wtp-search-results"></div>
-        
+
       </div><!-- #tab-basic -->
     </div><!-- .wrap -->
 
@@ -57,7 +56,7 @@ if ( file_exists( $config ) ) {
 <script type="text/javascript">
   var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 </script>
-<script type="text/javascript" src="../admin.js"></script>
+<script type="text/javascript" src="../assets/dist/js/admin.js"></script>
 <script type="text/javascript">
   var wethepeople = {
     editor: null,

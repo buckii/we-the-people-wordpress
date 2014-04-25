@@ -100,6 +100,8 @@ class WeThePeople_Plugin {
 
     // Register our TinyMCE button
     if ( ( current_user_can('edit_posts') || current_user_can('edit_pages') ) && get_user_option( 'rich_editing' ) ) {
+      add_action( 'admin_head-post.php', array( &$this, 'add_plugin_url_to_global_variable' ) );
+      add_action( 'admin_head-post-new.php', array( &$this, 'add_plugin_url_to_global_variable' ) );
       add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_plugin' ) );
       add_filter( 'mce_buttons_2', array( $this, 'add_tinymce_buttons' ) );
     }
@@ -112,6 +114,15 @@ class WeThePeople_Plugin {
 
     add_action( 'wp_ajax_wtp_petition_signature', array( &$this, 'sign_petition' ) );
     add_action( 'wp_ajax_nopriv_wtp_petition_signature', array( &$this, 'sign_petition' ) );
+  }
+
+  /**
+   * Put the plugin URL in a global JS variable so it's available for our TinyMCE widget
+   *
+   * @uses plugins_url()
+   */
+  public function add_plugin_url_to_global_variable() {
+    printf( '<script type="text/javascript">var WeThePeople = { plugin_url: "%s" }</script>' . PHP_EOL, plugins_url( '/', __FILE__ ) );
   }
 
   /**
@@ -279,10 +290,11 @@ class WeThePeople_Plugin {
    * @return array
    *
    * @uses plugins_url()
+   *
    * @since 1.0
    */
   public function register_tinymce_plugin( $plugins ) {
-    $plugins['wethepeople'] = plugins_url( 'js/tinymce/petition.js?' . self::PLUGIN_VERSION, __FILE__ );
+    $plugins['wethepeople'] = plugins_url( 'assets/dist/js/tinymce.js?' . self::PLUGIN_VERSION, __FILE__ );
     return $plugins;
   }
 
@@ -524,7 +536,7 @@ class WeThePeople_Plugin {
   protected function register_scripts() {
     global $pagenow;
 
-    wp_register_script( 'we-the-people', plugins_url( 'js/we-the-people.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
+    wp_register_script( 'we-the-people', plugins_url( 'assets/dist/js/we-the-people.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
     $localization = array(
       'ajaxurl' => admin_url( 'admin-ajax.php' ),
       'i18n' => array(
@@ -539,7 +551,7 @@ class WeThePeople_Plugin {
       )
     );
     wp_localize_script( 'we-the-people', 'WeThePeople', $localization );
-    wp_register_script( 'we-the-people-admin', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
+    wp_register_script( 'we-the-people-admin', plugins_url( 'assets/dist/js/admin.js', __FILE__ ), array( 'jquery' ), self::PLUGIN_VERSION, true );
 
     if ( ! is_admin() ) {
       wp_enqueue_script( 'we-the-people' );
@@ -564,8 +576,8 @@ class WeThePeople_Plugin {
   protected function register_styles() {
     global $pagenow;
 
-    wp_register_style( 'we-the-people', plugins_url( 'css/we-the-people.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
-    wp_register_style( 'we-the-people-admin', plugins_url( 'css/admin.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
+    wp_register_style( 'we-the-people', plugins_url( 'assets/dist/css/we-the-people.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
+    wp_register_style( 'we-the-people-admin', plugins_url( 'assets/dist/css/admin.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
 
     if ( ! is_admin() ) {
       wp_enqueue_style( 'we-the-people' );

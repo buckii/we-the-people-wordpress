@@ -11,6 +11,7 @@ var WeThePeopleCache = {};
 
 /**
  * Fire off an ajax request for the wtp_petition_search and handle the results
+ *
  * @global ajaxurl
  * @param object searchInput A jQuery object representing the search input
  * @param object results A jQuery object to have its .html() set to contain the results
