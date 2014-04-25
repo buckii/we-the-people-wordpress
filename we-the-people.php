@@ -383,6 +383,7 @@ class WeThePeople_Plugin {
    * @uses wp_enqueue_script()
    * @uses wp_localize_script()
    * @uses wp_register_script()
+   *
    * @since 1.0
    */
   protected function register_scripts() {
@@ -415,6 +416,7 @@ class WeThePeople_Plugin {
    * @uses plugins_url()
    * @uses wp_enqueue_style()
    * @uses wp_register_style()
+   *
    * @since 1.0
    */
   protected function register_styles() {
@@ -433,15 +435,17 @@ class WeThePeople_Plugin {
 }
 
 /**
- * Create an instance of WeThePeople_Plugin and store it in the global $we_the_people
- * @global $we_the_people
+ * Create an instance of WeThePeople_Plugin and store it in the globals $GLOBALS['we-the-people']
+ *
  * @return bool
+ *
  * @uses load_plugin_textdomain()
+ * @uses plugin_basename()
+ *
  * @since 1.0
  */
 function wethepeople_init() {
-  global $we_the_people;
-  $we_the_people = new WeThePeople_Plugin;
+  $GLOBALS['we-the-people'] = new WeThePeople_Plugin;
   load_plugin_textdomain( 'we-the-people', null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
   return true;
 }

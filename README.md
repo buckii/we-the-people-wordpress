@@ -17,9 +17,11 @@ Petitions IDs aren't especially easy to uncover from the We The People site so t
 
 To add a We The People petition to a WordPress dynamic sidebar go to Appearance > Widgets and drag a "WTP Petition" widget into the desired sidebar. Like the TinyMCE button the widget allows you to search for your desired petition by title.
 
-### `$we_the_people` global variable (advanced)
+### `$GLOBALS['we-the-people']` global variable (advanced)
 
-If you're a developer and need more complete access to the We The People API you can use the `api()` method available through the `$we_the_people` global variable. The `api()` method accepts two arguments: the API method to call ('retrieve' or 'index' in version 1.0) and an array of arguments to pass to the API.
+If you're a developer and need more complete access to the We The People API you can use the `api()` method available through the `$GLOBALS['we-the-people']` global variable. The `api()` method accepts two arguments: the API method to call ('retrieve' or 'index' in version 1.*) and an array of arguments to pass to the API.
+
+**Note:** Before version 2.0, the plugin used
 
 #### Examples
 
@@ -27,14 +29,14 @@ If you're a developer and need more complete access to the We The People API you
 
 ```php
 // equivalent to https://api.whitehouse.gov/v1/petitions/123abc.json
-$petition = $we_the_people->api( 'retrieve', array( 'id' => '123abc' ) );
+$petition = $GLOBALS['we-the-people']->api( 'retrieve', array( 'id' => '123abc' ) );
 ```
 
 ##### Searching for open petitions with "war" in the title
 
 ```php
 // equivalent to https://api.whitehouse.gov/v1/petitions.json?title=war&status=open
-$petition = $we_the_people->api( 'index', array( 'title' => 'war', 'status' => 'open' ) );
+$petition = $GLOBALS['we-the-people']->api( 'index', array( 'title' => 'war', 'status' => 'open' ) );
 ```
 
 Full API documentation is available [on the We The People API page](https://petitions.whitehouse.gov/developers).
@@ -150,7 +152,14 @@ add_action( 'init', 'mytheme_disable_wtp_scripts_styles' );
 
 At this time the We The People API is read-only, meaning your readers would need to visit https://petitions.whitehouse.gov in order to sign a petition. The White House plans to release a write API sometime in the near future at which point this plugin will be upgraded to enable this capability.
 
+### I just upgraded and am getting
+
 ## Changelog
+
+### Version 2.0
+
+* Leverage the new write API, enabling sites with a valid API key to sign petitions
+* **Breaking change:** Removed references to global `$we_the_people` variable, opting instead for `$GLOBALS['we-the-people']`
 
 ### Version 1.1
 

@@ -29,15 +29,14 @@ class WeThePeople_Plugin_Widget extends WP_Widget {
    * @since 1.0
    */
   public function widget( $args, $instance ) {
-    global $we_the_people;
-    if ( ! $we_the_people instanceof WeThePeople_Plugin ) {
-      $we_the_people = new WeThePeople_Plugin;
+    if ( ! $GLOBALS['we-the-people'] instanceof WeThePeople_Plugin ) {
+      $GLOBALS['we-the-people'] = new WeThePeople_Plugin;
     }
 
     if ( isset( $instance['petition_id'] ) && $instance['petition_id'] ) {
-      if ( $petition = $we_the_people->api( 'retrieve', array( 'id' => $instance['petition_id'] ) ) ) {
+      if ( $petition = $GLOBALS['we-the-people']->api( 'retrieve', array( 'id' => $instance['petition_id'] ) ) ) {
         echo $args['before_widget'];
-        $we_the_people->display_petition( $petition, array( 'echo' => true, 'widget' => true, 'widget_args' => $args ) );
+        $GLOBALS['we-the-people']->display_petition( $petition, array( 'echo' => true, 'widget' => true, 'widget_args' => $args ) );
         echo $args['after_widget'];
       }
     }
