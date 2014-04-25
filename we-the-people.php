@@ -3,7 +3,7 @@
  * Plugin Name: We The People
  * Plugin URI: https://petitions.whitehouse.gov/
  * Description: Display White House petitions on your WordPress site
- * Version: 1.1
+ * Version: 2.0
  * Author: Buckeye Interactive
  * Author URI: http://www.buckeyeinteractive.com
  * License: GPLv2 or later
@@ -15,16 +15,16 @@
  * @author Buckeye Interactive
  */
 
-require_once dirname( __FILE__ ) . '/plugin-options.php';
-require_once dirname( __FILE__ ) . '/widget.php';
-require_once dirname( __FILE__ ) . '/wtp-entity.class.php';
+require_once dirname( __FILE__ ) . '/inc/plugin-options.php';
+require_once dirname( __FILE__ ) . '/inc/widget.php';
+require_once dirname( __FILE__ ) . '/inc/wtp-entity.class.php';
 
 class WeThePeople_Plugin {
 
   /**
    * The API endpoint (with trailing slash) for all API requests
    */
-  const API_ENDPOINT = 'https://api.whitehouse.gov/v1/';
+  const API_ENDPOINT = 'http://11111011100.api.whitehouse.gov/v1/';
 
   /**
    * The URL for API key registration
@@ -34,7 +34,7 @@ class WeThePeople_Plugin {
   /**
    * The current plugin version
    */
-  const PLUGIN_VERSION = '1.0';
+  const PLUGIN_VERSION = '2.0';
 
   /**
    * The amount of time (in seconds) transient data should live before it's purged
@@ -53,16 +53,22 @@ class WeThePeople_Plugin {
 
   /**
    * Class constructor
+   *
    * @return void
+   *
    * @uses add_action()
    * @uses add_filter()
    * @uses add_shortcode()
+   *
    * @since 1.0
    */
   public function __construct() {
     // Register our shortcode
     $this->shortcode_name = apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' );
     add_shortcode( $this->shortcode_name, array( &$this, 'petition_shortcode' ) );
+
+    // Register the plugin settings page
+    new WeThePeople_Plugin_Options;
 
     // Register/enqueue scripts and styles
     $this->register_scripts();
@@ -81,8 +87,10 @@ class WeThePeople_Plugin {
   /**
    * Add the Petition button to TinyMCE
    * This method should be called via the 'mce_buttons' (or 'mce_buttons_#') WordPress filter
+   *
    * @param array $buttons The TinyMCE buttons
    * @return array
+   *
    * @since 1.0
    */
   public function add_tinymce_buttons( $buttons ) {
@@ -93,12 +101,14 @@ class WeThePeople_Plugin {
   /**
    * Make a call to the We The People API
    * This method acts as a controller, farming out the work to more specialized API methods
+   *
    * @param str $action The API method (retrieve|index) to call
    * @param array $args Arguments to pass to the API call
    * @return object
+   *
    * @since 1.0
    */
-  public function api( $action, $args=array() ) {
+  public function api( $action, $args = array() ) {
     $method = sprintf( 'api_%s_action', strtolower( trim( $action ) ) );
     if ( ! method_exists( $this, $method ) ) {
       $this->error( sprintf( __( 'Class method %s does not exist', 'we-the-people' ), $method ) );
@@ -119,10 +129,12 @@ class WeThePeople_Plugin {
    * @param object $petition An API response for a single petition
    * @param array $data Additional data to pass to the template file
    * @return mixed (str|void depending on $echo)
+   *
    * @uses locate_template()
+   *
    * @since 1.0
    */
-  public function display_petition( $petition, $data=array() ) {
+  public function display_petition( $petition, $data = array() ) {
     $contents = null;
 
     // Service unavailable and/or invalid petition
@@ -170,13 +182,16 @@ class WeThePeople_Plugin {
 
   /**
    * Handler for the [wtp-petition] shortcode
+   *
    * @param array $atts Attributes passed in the shortcode call
    * @param str $content Content to be added above the petition information
    * @return str
+   *
    * @uses shortcode_atts()
+   *
    * @since 1.0
    */
-  public function petition_shortcode( $atts, $content='' ) {
+  public function petition_shortcode( $atts, $content = '' ) {
     $defaults = array(
       'id' => false,
       'signature' => false
@@ -200,8 +215,10 @@ class WeThePeople_Plugin {
   /**
    * Register our TinyMCE plugin
    * This should be called via the 'mce_external_plugins' filter
+   *
    * @param array $plugins Plugins registered within TinyMCE
    * @return array
+   *
    * @uses plugins_url()
    * @since 1.0
    */
@@ -212,7 +229,9 @@ class WeThePeople_Plugin {
 
   /**
    * Ajax handler for a petition search
+   *
    * @return void
+   *
    * @since 1.0
    */
   public function tinymce_ajax_petition_search() {
@@ -249,8 +268,10 @@ class WeThePeople_Plugin {
   /**
    * Handle requests for the API index action
    * Documentation for the API can be found at: https://petitions.whitehouse.gov/developers
+   *
    * @param array $args Arguments to pass to the API call
    * @return object
+   *
    * @since 1.0
    */
   protected function api_index_action( $args=array() ) {
@@ -260,11 +281,13 @@ class WeThePeople_Plugin {
   /**
    * Handle requests for the API retrieve action
    * Currently the only argument retrieve takes is an ID so $args['id'] should always be set
+   *
    * @param array $args Arguments to pass to the API call
-   * @return object
+   * @return We_The_People_Entity object
+   *
    * @since 1.0
    */
-  protected function api_retrieve_action( $args=array() ) {
+  protected function api_retrieve_action( $args = array() ) {
     $id = ( isset( $args['id'] ) ? $args['id'] : null );
     $response = $this->make_api_call( sprintf( 'petitions/%s.json', $id ) );
     return new We_The_People_Entity( ( $response && is_array( $response ) ? current( $response ) : '' ) );
@@ -274,6 +297,7 @@ class WeThePeople_Plugin {
    * Log an error
    * @param str $message The error message to log
    * @return void
+   *
    * @since 1.0
    *
    * @todo Write some better error reporting
@@ -292,20 +316,23 @@ class WeThePeople_Plugin {
    *
    * @param str $call The assembled API call
    * @return object
+   *
    * @uses get_transient()
    * @uses is_wp_error()
    * @uses set_transient()
    * @uses trailingslashit()
    * @uses wp_remote_get()
+   *
    * @since 1.0
    */
-  protected function make_api_call( $call ) {
+  protected function make_api_call( $call, $args = array() ) {
     $request_uri = trailingslashit( self::API_ENDPOINT ) . $call;
-    $hash = md5( $request_uri ); // Transient keys should be < 45 chars
-    $lt_hash = 'lt-' . $hash;
+    $hash = md5( $request_uri );
+    $transient_name = sprintf( 'wtp-%s', $hash );
+    $lt_transient_name = sprintf( 'wtp-lt-%s', $hash );
 
     // If we have a matching [short-term] transient return that instead
-    if ( $data = get_transient( $hash ) ) {
+    if ( $data = get_transient( $transient_name ) ) {
       return $data;
     }
 
@@ -314,7 +341,7 @@ class WeThePeople_Plugin {
     if ( is_wp_error( $response ) ) {
 
       // An error? Maybe we still have some data in a long-term transient
-      if ( $data = get_transient( $lt_hash ) ) {
+      if ( $data = get_transient( $lt_transient_name ) ) {
         return $data;
       }
 
@@ -333,22 +360,24 @@ class WeThePeople_Plugin {
     // Save the response body as a transient
     $body = json_decode( $response['body'], false );
 
-    // Catch when the service is unavailable ::cough::shutdown::cough::
+    // Catch when the service is unavailable ::cough::government shutdown::cough::
     if ( isset( $body->metadata->responseInfo->status ) && $body->metadata->responseInfo->status == 500 ) {
       $this->error( sprintf( __( 'The We The People site is currently unavailable: %s', 'we-the-people' ),
         $body->metadata->responseInfo->developerMessage
       ) );
       return false;
     }
-    set_transient( $hash, $body->results, self::TRANSIENT_EXPIRES );
-    set_transient( $lt_hash, $body->results, self::TRANSIENT_LT_EXPIRES );
+    set_transient( $transient_name, $body->results, self::TRANSIENT_EXPIRES );
+    set_transient( $lt_transient_name, $body->results, self::TRANSIENT_LT_EXPIRES );
     return $body->results;
   }
 
   /**
    * Register plugin JavaScript
+   *
    * @global $pagenow
    * @return void
+   *
    * @uses is_admin()
    * @uses plugins_url()
    * @uses wp_enqueue_script()
@@ -378,8 +407,10 @@ class WeThePeople_Plugin {
 
   /**
    * Register plugin styles
+   *
    * @global $pagenow
    * @return void
+   *
    * @uses is_admin()
    * @uses plugins_url()
    * @uses wp_enqueue_style()
@@ -415,52 +446,3 @@ function wethepeople_init() {
   return true;
 }
 add_action( 'init', 'wethepeople_init' );
-
-/**
- * Load the We The People petition signature form
- * @global $petition
- * @param str $petition_id The petition ID
- * @return str
- */
-function wethepeople_get_signature_form( $petition_id=false ) {
-  global $petition;
-
-  // Don't load the form if an API key hasn't been provided
-  if ( ! wethepeople_get_option( 'api_key' ) ) {
-    if ( current_user_can( 'manage_options' ) ) {
-      return sprintf( '<p class="wtp-error">%s</p>',
-        sprintf(
-          __( 'In order to sign petitions you must <a href="%s" rel="external">register for an API key</a> with We The People.', 'we-the-people' ),
-          self::API_KEY_REGISTRATION_URL
-        )
-      );
-
-    } else {
-      return;
-    }
-    return ( current_user_can( 'manage_options' ) ? sprintf( '<p class="wtp-error">%s</p>', __( ) ) : '' );
-  }
-
-  // Default the $petition->id
-  if ( ! $petition_id ) {
-    $petition_id = $petition->id;
-  }
-
-  // Locate templates
-  if ( ! $template_file = locate_template( array( 'wtp-signature-form.php' ), false, false ) ) {
-    $template_file = dirname( __FILE__ ) . '/templates/wtp-signature-form.php';
-  }
-  ob_start();
-  include $template_file;
-  $form = ob_get_contents();
-  ob_end_clean();
-
-  return $form;
-}
-
-/**
- * Shortcut for `echo wethpeople_get_signature_form( $petition_id )`
- */
-function wethepeople_signature_form( $petition_id=false ) {
-  echo wethepeople_get_signature_form( $petition_id );
-}

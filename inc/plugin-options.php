@@ -108,11 +108,6 @@ class WeThePeople_Plugin_Options {
 }
 
 /**
- * Instantiate the plugin options
- */
-new WeThePeople_Plugin_Options();
-
-/**
  * Get an option from our theme options array
  * @param str $key The option key
  * @param str $default The default value to return (if $key is not null)
