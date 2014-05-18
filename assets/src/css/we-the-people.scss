@@ -42,6 +42,30 @@
   }
 }
 
+.wtp-petitions-signature {
+  .wtp-petition-signature-fields {
+    &, li {
+      margin-left: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    li {
+      display: block;
+      overflow: hidden;
+    }
+    label, input {
+      float: left;
+      display: block;
+    }
+    label {
+      width: 20%;
+    }
+    input {
+      width: 80%;
+    }
+  }
+}
+
 @media print {
   .wtp-petition {
     .toggle-btn {
