@@ -6,6 +6,8 @@
  */
 
 #wtp-petition {
+  margin: 0;
+  padding: 8px 16px;
   h3 {
     margin: 10px 0 5px;
     font-size: 1.1em;
@@ -25,45 +27,14 @@
   }
 }
 
-#tabs {
-  margin: 0;
-  padding: 15px 15px 3px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #dfdfdf;
-  li {
-    display: inline;
-  }
-  a {
-    padding: 6px;
-    color: #2583ad;
-    text-decoration: none;
-    border-width: 1px 1px 0;
-    border-style: solid solid none;
-    border-color: #f1f1f1;
-    &:hover, &:focus, &:active, &.current {
-      color: #d54e21;
-    }
-    &.current {
-      background-color: #fff;
-      border-color: #dfdfdf;
-      border-bottom-color: #fff;
-    }
-  }
-}
-.tab {
-  margin: 0;
-  padding: 5px 20px 10px;
-  background: #fff;
-  border: 1px solid #dfdfdf;
-}
-
 .wtp-petition-search.loading {
   background: inline-image('loading.gif') right center no-repeat;
 }
+
 .wtp-search-results {
   max-height: 250px;
   overflow: auto;
-  margin-top: 5px;
+  margin: 5px 0 10px;
   ul {
     display: block;
     margin: 0;

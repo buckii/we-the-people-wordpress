@@ -21,29 +21,23 @@ if ( file_exists( $config ) ) {
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
+<title><?php _e( 'Insert a petition', 'we-the-people' ); ?></title>
 <link href="../assets/dist/css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 </head>
 
 <body id="wtp-petition" class="wp-core-ui">
   <form id="wtp-insert-petition" action="?" onsubmit="javascript:wethepeople.insert();">
-    <h3><?php _e( 'Insert a petition', 'we-the-people' ); ?></h3>
-    <div class="wrap">
-      <div id="tab-basic" class="tab">
-        <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
-        <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
-        <label for="petition-enable-signature-form" class="inline">
-          <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
-          <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
-        </label>
+    <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
+    <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
+    <label for="petition-enable-signature-form" class="inline">
+      <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
+      <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
+    </label>
 
-        <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
-        <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
-        <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
-        <div id="search-results" class="wtp-search-results"></div>
-
-      </div><!-- #tab-basic -->
-    </div><!-- .wrap -->
+    <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
+    <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
+    <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
+    <div id="search-results" class="wtp-search-results"></div>
 
     <div class="mceActionPanel">
       <input id="insert" type="submit" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
