@@ -421,7 +421,7 @@ class WeThePeople_Plugin {
             $petition->id,
             $petition->title,
             $status,
-            sprintf( __( '%d signatures', 'we-the-people' ), $petition->signatureCount )
+            sprintf( __( '%s signatures', 'we-the-people' ), number_format_i18n( $petition->signatureCount ) )
           );
         }
         echo '</ul>';
