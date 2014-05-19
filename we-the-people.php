@@ -111,7 +111,6 @@ class WeThePeople_Plugin {
 
     // Ajax hooks
     add_action( 'wp_ajax_wtp_petition_search', array( &$this, 'tinymce_ajax_petition_search' ) );
-
     add_action( 'wp_ajax_wtp_petition_signature', array( &$this, 'sign_petition' ) );
     add_action( 'wp_ajax_nopriv_wtp_petition_signature', array( &$this, 'sign_petition' ) );
   }
@@ -464,15 +463,14 @@ class WeThePeople_Plugin {
 
   /**
    * Log an error
+   *
    * @param str $message The error message to log
-   * @return void
+   * @return bool
    *
    * @since 1.0
-   *
-   * @todo Write some better error reporting
    */
   protected function error( $message ) {
-    error_log( sprintf( 'WeThePeople: %s', $message ) );
+    return error_log( sprintf( 'WeThePeople: %s', $message ) );
   }
 
   /**
