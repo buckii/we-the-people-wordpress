@@ -29,19 +29,31 @@ if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeo
 
     <ul class="wtp-petition-signature-fields">
       <li>
-        <label for="wtp-petition-<?php echo $petition_id; ?>-first_name"><?php _e( 'First name', 'we-the-people' ); ?></label>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-first_name">
+          <?php _e( 'First name', 'we-the-people' ); ?>
+          <span class="required">*</span>
+        </label>
         <input name="first_name" id="wtp-petition-<?php echo $petition_id; ?>-first_name" type="text" value="<?php echo $current_user->user_firstname; ?>" required />
       </li>
       <li>
-        <label for="wtp-petition-<?php echo $petition_id; ?>-last_name"><?php _e( 'Last name', 'we-the-people' ); ?></label>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-last_name">
+          <?php _e( 'Last name', 'we-the-people' ); ?>
+          <span class="required">*</span>
+        </label>
         <input name="last_name" id="wtp-petition-<?php echo $petition_id; ?>-last_name" type="text" value="<?php echo $current_user->user_lastname; ?>" required />
       </li>
       <li>
-        <label for="wtp-petition-<?php echo $petition_id; ?>-email"><?php _e( 'Email address', 'we-the-people' ); ?></label>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-email">
+          <?php _e( 'Email address', 'we-the-people' ); ?>
+          <span class="required">*</span>
+        </label>
         <input name="email" id="wtp-petition-<?php echo $petition_id; ?>-email" type="email" value="<?php echo $current_user->user_email; ?>" required />
       </li>
       <li>
-        <label for="wtp-petition-<?php echo $petition_id; ?>-zip"><?php _e( 'Postal code', 'we-the-people' ); ?></label>
+        <label for="wtp-petition-<?php echo $petition_id; ?>-zip">
+          <?php _e( 'Postal code', 'we-the-people' ); ?>
+          <span class="required">*</span>
+        </label>
         <input name="zip" id="wtp-petition-<?php echo $petition_id; ?>-zip" type="text" value="" required />
       </li>
     </ul>

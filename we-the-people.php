@@ -598,11 +598,19 @@ class WeThePeople_Plugin {
   protected function register_styles() {
     global $pagenow;
 
+    $hook = 'we-the-people';
     wp_register_style( 'we-the-people', plugins_url( 'assets/dist/css/we-the-people.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
     wp_register_style( 'we-the-people-admin', plugins_url( 'assets/dist/css/admin.css', __FILE__ ), null, self::PLUGIN_VERSION, 'all' );
 
+    // Attempt to load theme-specific stylesheet fixes
+    $template = get_option( 'template' );
+    if ( file_exists( sprintf( '%s/assets/dist/css/%s.css', dirname( __FILE__ ), $template ) ) ) {
+      $hook = sprintf( 'we-the-people-%s', $template );
+      wp_register_style( $hook, plugins_url( sprintf( 'assets/dist/css/%s.css', $template ), __FILE__ ), array( 'we-the-people' ), self::PLUGIN_VERSION, 'all' );
+    }
+
     if ( ! is_admin() && apply_filters( 'wethepeople_load_styles', true ) ) {
-      wp_enqueue_style( 'we-the-people' );
+      wp_enqueue_style( $hook );
     } elseif ( is_admin() && $pagenow == 'widgets.php' ) {
       wp_enqueue_style( 'we-the-people-admin' );
     }
