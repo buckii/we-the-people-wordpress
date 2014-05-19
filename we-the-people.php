@@ -406,8 +406,22 @@ class WeThePeople_Plugin {
       case 'ul':
         echo '<ul>';
         foreach ( $response as $petition ) {
-          printf( '<li><a href="%s" data-petition-id="%s">%s</a> <span class="signature-count">%s</span></li>',
-            $petition->url, $petition->id, $petition->title, sprintf( __( '%d signatures', 'we-the-people' ), $petition->signatureCount )
+          if ( $petition->status == 'responded' ) {
+            $status = sprintf( '<span class="petition-status-responded">%s</span>', __( '(Responded)', 'we-the-people' ) );
+          } elseif ( $petition->status == 'closed' ) {
+            $status = sprintf( '<span class="petition-status-closed">%s</span>', __( '(Closed)', 'we-the-people' ) );
+          } else {
+            $status = '';
+          }
+
+          printf(
+            '<li><a href="%s" title="%s" data-petition-id="%s">%s</a> %s<span class="signature-count">%s</span></li>',
+            $petition->url,
+            esc_attr( trim( strip_tags( $petition->body ) ) ),
+            $petition->id,
+            $petition->title,
+            $status,
+            sprintf( __( '%d signatures', 'we-the-people' ), $petition->signatureCount )
           );
         }
         echo '</ul>';
