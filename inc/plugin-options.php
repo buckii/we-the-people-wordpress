@@ -31,7 +31,7 @@ class WeThePeople_Plugin_Options {
    * @since 2.0
    */
   public function add_options_page() {
-    add_plugins_page(
+    add_options_page(
       __( 'We The People', 'we-the-people' ),
       __( 'We The People', 'we-the-people' ),
       'manage_options',
