@@ -60,7 +60,7 @@ class We_The_People_Entity {
   /**
    * Get a list of classnames for this entity
    *
-   * @param str $additional User-provided classnames to include
+   * @param str $additional User-provided classnames to include, separated by spaces
    * @param bool $array Should this be returned as an array or a string (true = array, false = string )
    * @return mixed (array|str) Dependent upon the $array argument
    *
