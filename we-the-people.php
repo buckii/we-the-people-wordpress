@@ -394,6 +394,9 @@ class WeThePeople_Plugin {
     if ( isset( $_POST['term'] ) && $_POST['term'] ) {
       $args['title'] = $_POST['term'];
     }
+    if ( isset( $_POST['activeOnly'] ) && intval( $_POST['activeOnly'] ) ) {
+      $args['status'] = 'open';
+    }
     $response =  $this->api( 'index', $args );
 
     if ( ! $response ) {

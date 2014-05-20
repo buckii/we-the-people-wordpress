@@ -25,7 +25,7 @@
         ed.windowManager.open({
           file: WeThePeople.plugin_url + 'inc/tinymce-plugin.php',
           width: 500,
-          height: 440,
+          height: 455,
           inline: true
         });
       });

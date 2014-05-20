@@ -37,6 +37,10 @@ if ( file_exists( $config ) ) {
     <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
     <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
     <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
+    <label for="petition-search-only-active" class="inline">
+      <input name="petition-search-only-active" id="petition-search-only-active" type="checkbox" />
+      <?php _e( 'Limit search results to active petitions?', 'we-the-people' ); ?>
+    </label>
     <div id="search-results" class="wtp-search-results"></div>
 
     <div class="mceActionPanel">
