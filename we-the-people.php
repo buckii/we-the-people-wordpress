@@ -409,9 +409,11 @@ class WeThePeople_Plugin {
         echo '<ul>';
         foreach ( $response as $petition ) {
           if ( $petition->status == 'responded' ) {
-            $status = sprintf( '<span class="petition-status-responded">%s</span>', __( '(Responded)', 'we-the-people' ) );
+            $status = sprintf( '<span class="petition-status petition-status-responded">%s</span>', __( '(Responded)', 'we-the-people' ) );
+          } elseif ( $petition->status == 'pending response' ) {
+            $status = sprintf( '<span class="petition-status petition-status-pending-response">%s</span>', __( '(Pending response)', 'we-the-people' ) );
           } elseif ( $petition->status == 'closed' ) {
-            $status = sprintf( '<span class="petition-status-closed">%s</span>', __( '(Closed)', 'we-the-people' ) );
+            $status = sprintf( '<span class="petition-status petition-status-closed">%s</span>', __( '(Closed)', 'we-the-people' ) );
           } else {
             $status = '';
           }
