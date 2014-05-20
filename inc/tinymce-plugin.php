@@ -29,10 +29,12 @@ if ( file_exists( $config ) ) {
   <form id="wtp-insert-petition" action="?" onsubmit="javascript:wethepeople.insert();">
     <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
     <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
-    <label for="petition-enable-signature-form" class="inline">
-      <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
-      <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
-    </label>
+    <?php if ( $GLOBALS['we-the-people']->get_api_key() ): ?>
+      <label for="petition-enable-signature-form" class="inline">
+        <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
+        <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
+      </label>
+    <?php endif; ?>
 
     <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
     <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
