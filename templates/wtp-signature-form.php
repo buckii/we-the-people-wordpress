@@ -10,13 +10,15 @@
 
 $current_user = wp_get_current_user();
 
-if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeople_Plugin::SIGNATURE_STATUS_CODE_SUCCESS ) : ?>
+if ( wethepeople_signature_submitted( $petition_id ) ) : ?>
 
-  <p>Great success!</p>
+  <div class="wtp-signature-success">
+    <p><?php _e( 'Your signature has been submitted! You should receive a confirmation email from We The People shortly!', 'we-the-people' ); ?></p>
+  </div>
 
 <?php else : ?>
 
-  <?php if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeople_Plugin::SIGNATURE_STATUS_CODE_ERROR ) : ?>
+  <?php if ( wethepeople_signature_error( $petition_id ) ) : ?>
 
     <div class="wtp-signature-error">
       <p><?php _e( 'There was a problem submitting your signature for this petition!', 'we-the-people' ); ?></p>
@@ -63,6 +65,6 @@ if ( get_query_var( WeThePeople_Plugin::SIGNATURE_STATUS_QUERY_VAR ) == WeThePeo
       <input name="petition_id" type="hidden" value="<?php echo $petition_id; ?>" />
       <input name="action" type="hidden" value="wtp_petition_signature" />
     </p>
-  </form><!-- #wtp-petition-signature-<?php echo $petition->id; ?> -->
+  </form><!-- #wtp-petition-signature-<?php echo $petition_id; ?> -->
 
 <?php endif; ?>

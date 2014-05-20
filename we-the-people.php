@@ -106,9 +106,6 @@ class WeThePeople_Plugin {
       add_filter( 'mce_buttons_2', array( $this, 'add_tinymce_buttons' ) );
     }
 
-    // Query vars
-    add_filter( 'query_vars', array( &$this, 'register_query_vars' ) );
-
     // Ajax hooks
     add_action( 'wp_ajax_wtp_petition_search', array( &$this, 'tinymce_ajax_petition_search' ) );
     add_action( 'wp_ajax_wtp_petition_signature', array( &$this, 'sign_petition' ) );
@@ -275,19 +272,6 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Register query vars within WordPress
-   *
-   * @param array $vars Registered query vars
-   * @return array
-   *
-   * @since 2.0
-   */
-  public function register_query_vars( $vars ) {
-    $vars[] = self::SIGNATURE_STATUS_QUERY_VAR;
-    return $vars;
-  }
-
-  /**
    * Register our TinyMCE plugin
    * This should be called via the 'mce_external_plugins' filter
    *
@@ -376,7 +360,7 @@ class WeThePeople_Plugin {
 
     // We're actually on admin-ajax.php and it's not an Ajax call - send the user back
     } else {
-      wp_safe_redirect( add_query_arg( self::SIGNATURE_STATUS_QUERY_VAR, $status, wp_get_referer() ) );
+      wp_safe_redirect( add_query_arg( sprintf( self::SIGNATURE_STATUS_QUERY_VAR, $data['petition_id'] ), $status, wp_get_referer() ) );
     }
     exit;
   }

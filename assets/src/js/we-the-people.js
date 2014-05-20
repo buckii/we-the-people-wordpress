@@ -45,7 +45,7 @@ jQuery( function ( $ ) {
     $.post( WeThePeople.ajaxurl, data, function ( response ) {
       if ( response === WeThePeople.signatureStatus.success ) {
         form.fadeOut( 200, function () {
-          form.text( WeThePeople.i18n.signatureSuccess ).fadeIn( 200 );
+          form.html( '<div class="wtp-signature-success"><p>' + WeThePeople.i18n.signatureSuccess + '</p></div>' ).fadeIn( 200 );
         });
       } else {
         form.before( '<div class="wtp-signature-error"><p>' + WeThePeople.i18n.signatureError + '</p></div>' );
