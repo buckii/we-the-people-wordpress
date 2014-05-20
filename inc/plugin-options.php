@@ -49,9 +49,6 @@ class WeThePeople_Plugin_Options {
     print '<div class="wrap">';
     screen_icon();
     printf( '<h2>%s</h2>', __( 'We The People', 'we-the-people' ) );
-    if ( isset( $_GET['settings-updated'] ) ) {
-      printf( '<div id="message" class="updated"><p>%s</p></div>', __( 'Your changes have been saved', 'we-the-people' ) );
-    }
     print '<form method="post" action="options.php">';
     settings_fields( 'wethepeople_options' );
     do_settings_sections( 'we-the-people' );
