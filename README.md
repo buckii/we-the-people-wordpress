@@ -233,6 +233,11 @@ $we_the_people = $GLOBALS['we-the-people']
 
 * Better petition searches on the back-end (#6)
 * Themes that can be applied if the user *doesn't* want the hands-off approach we're currently taking (#7)
+* Set cookies to track which petitions a user has signed so we can hide the signature forms
+
+## Contribute
+
+If you'd like to contribute to the ongoing development of the We The People WordPress plugin, please feel free to fork the repository and issue pull requests for enhancements, bugfixes, etc. We'd also *really* like to get a good Spanish translation in place, so if you're able to help out, please see [the WordPress.org Translators Handbook](http://make.wordpress.org/polyglots/handbook/) for details on how to get started.
 
 ## Special Thanks
 
