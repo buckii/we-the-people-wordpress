@@ -14,7 +14,7 @@ add_filter( 'wethepeople_petition_body', 'wptexturize' );
 //printf( '<pre>%s</pre>', print_r( $petition, true ) );
 ?>
 
-<div id="wtp-petition-<?php echo $petition->id; ?>" class="wtp-petition clearfix">
+<div id="wtp-petition-<?php echo $petition->id; ?>" <?php $petition->petition_class( 'wtp-petition clearfix' ); ?>>
   <h2 class="petition-title"><?php echo $petition->title; ?></h2>
   <blockquote><?php echo apply_filters( 'wethepeople_petition_body', $petition->body ); ?></blockquote>
 
@@ -26,14 +26,30 @@ add_filter( 'wethepeople_petition_body', 'wptexturize' );
     </a>
   </p>
 
+<?php elseif ( $petition->status == 'pending response' ) : ?>
+
+  <p class="petition-status pending">
+    <?php _e( 'This petition is pending a response from The White House.', 'we-the-people' ); ?>
+  </p>
+
 <?php elseif ( $petition->status != 'closed' ) : ?>
 
   <p class="petition-status">
-    <?php printf( __( '%d signatures still needed by %s', 'we-the-people' ), $petition->signaturesNeeded, date_i18n( get_option( 'date_format' ), $petition->deadline ) ); ?>
+    <?php
+      printf(
+        _n( '%d signature still needed by %s', '%d signatures still needed by %s', $petition->signaturesNeeded, 'we-the-people' ),
+        number_format_i18n( $petition->signaturesNeeded ),
+        date_i18n( get_option( 'date_format' ), $petition->deadline )
+      );
+    ?>
     <a href="<?php echo $petition->url; ?>" title="<?php echo esc_attr( __( 'Sign this petition on We The People', 'we-the-people' ) ); ?>" class="sign-btn" rel="external">
       <?php _e( 'Sign this petition', 'we-the-people' ); ?>
     </a>
   </p>
+
+  <?php if ( $signature ) : ?>
+    <?php wethepeople_signature_form( $petition->id ); ?>
+  <?php endif; ?>
 
 <?php else : ?>
 

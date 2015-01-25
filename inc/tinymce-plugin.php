@@ -21,26 +21,29 @@ if ( file_exists( $config ) ) {
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?php _e( 'Insert petition', 'we-the-people' ); ?></title>
-<link href="<?php echo includes_url( '/js/tinymce/themes/advanced/skins/wp_theme/dialog.css' ); ?>" type="text/css" rel="stylesheet" media="screen" />
-<link href="../../css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
+<title><?php _e( 'Insert a petition', 'we-the-people' ); ?></title>
+<link href="../assets/dist/css/admin.css?<?php echo time(); ?>" type="text/css" rel="stylesheet" media="all" />
 </head>
 
 <body id="wtp-petition" class="wp-core-ui">
   <form id="wtp-insert-petition" action="?" onsubmit="javascript:wethepeople.insert();">
-    <h3><?php _e( 'Insert a petition', 'we-the-people' ); ?></h3>
-    <div class="wrap">
-      <div id="tab-basic" class="tab">
-        <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
-        <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
+    <label for="petition-id"><?php _e( 'Petition ID:', 'we-the-people' ); ?></label>
+    <input name="petition-id" id="petition-id" type="text" class="wtp-petition-id" />
+    <?php if ( $GLOBALS['we-the-people']->get_api_key() ): ?>
+      <label for="petition-enable-signature-form" class="inline">
+        <input name="petition-enable-signature-form" id="petition-enable-signature-form" type="checkbox" />
+        <?php _e( 'Enable signature form?', 'we-the-people' ); ?>
+      </label>
+    <?php endif; ?>
 
-        <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
-        <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
-        <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
-        <div id="search-results" class="wtp-search-results"></div>
-      </div><!-- #tab-basic -->
-
-    </div><!-- .wrap -->
+    <p><?php _e( "Don't know your petition ID? Search We The People:", 'we-the-people' ); ?></p>
+    <label for="petition-search-term"><?php _e( 'Search term:', 'we-the-people' ); ?></label>
+    <input name="petition-search-term" id="petition-search-term" type="text" class="wtp-petition-search" placeholder="<?php echo esc_attr( __( 'e.g. Guns, taxes, etc.', 'we-the-people' ) ); ?>" />
+    <label for="petition-search-only-active" class="inline">
+      <input name="petition-search-only-active" id="petition-search-only-active" type="checkbox" />
+      <?php _e( 'Limit search results to active petitions?', 'we-the-people' ); ?>
+    </label>
+    <div id="search-results" class="wtp-search-results"></div>
 
     <div class="mceActionPanel">
       <input id="insert" type="submit" value="<?php echo esc_attr( __( 'Insert', 'we-the-people' ) ); ?>" />
@@ -53,7 +56,7 @@ if ( file_exists( $config ) ) {
 <script type="text/javascript">
   var ajaxurl = ajaxurl || '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 </script>
-<script type="text/javascript" src="../admin.js"></script>
+<script type="text/javascript" src="../assets/dist/js/admin.js"></script>
 <script type="text/javascript">
   var wethepeople = {
     editor: null,
@@ -63,7 +66,8 @@ if ( file_exists( $config ) ) {
     },
     insert: function insertPetition() {
       var shortcode_atts = {
-        id: jQuery( '#petition-id' ).val()
+        id: jQuery( '#petition-id' ).val(),
+        signature: ( jQuery( '#petition-enable-signature-form' ).is( ':checked' ) ? '1' : '0' )
       },
       shortcode = '[<?php echo apply_filters( 'wethepeople_shortcode_name', 'wtp-petition' ); ?>',
       prop;

@@ -1,0 +1,64 @@
+/**
+ * Admin styles for We The People
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+
+#wtp-petition {
+  margin: 0;
+  padding: 8px 16px;
+  h3 {
+    margin: 10px 0 5px;
+    font-size: 1.1em;
+  }
+  label {
+    display: inline-block;
+    width: 85px;
+    &.inline {
+      width: auto;
+      margin-left: 85px;
+    }
+  }
+  input[type="text"] {
+    width: 200px;
+    margin: 0 0 10px;
+    padding: 3px 24px 3px 3px;
+  }
+}
+
+.wtp-petition-search.loading {
+  background: inline-image('loading.gif') right center no-repeat;
+}
+
+.wtp-search-results {
+  max-height: 250px;
+  overflow: auto;
+  margin: 5px 0 10px;
+  ul {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    position: relative;
+    margin-bottom: 1em;
+    padding-right: 100px;
+  }
+  .font-size, .petition-status {
+    font-size: .9em;
+    color: #666;
+  }
+  .signature-count {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    max-width: 100px;
+    overflow: hidden;
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-style: italic;
+  }
+}

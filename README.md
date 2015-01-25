@@ -5,21 +5,34 @@ In May 2013 the White House released an API for We The People, a petition applic
 
 This plugin allows WordPress site owners to search and embed petitions from We The People into WordPress. Perhaps you're writing an opinion piece on a petition and want real-time statistics on signatures and any response from the White House. Maybe you're a supporter of a particular issue and want to feature it on your sidebar to help promote awareness. The ease of WordPress with the totally customizable templates of the We The People plugin give you the power to share what's important to you.
 
+## API keys
+
+Version 2.0 of the plugin introduced the ability to sign petitions via the We The People Write API. In order to enable this feature within the plugin, it's necessary to [acquire an API key from We The People](http://www.whitehouse.gov/webform/apply-access-we-people-write-api), then enter in the We The People WordPress settings page (Settings > We The People). Alternatively, you may add the API key to your wp-config.php file by adding the following code above the "stop editing" comment:
+
+```php
+// We The People API
+define('WTP_API_KEY', 'your-api-key');
+```
+
+**Note:** If you go the wp-config.php route, the plugin settings page will disappear as the API key is the only plugin option at this time.
+
 ## Using the plugin
 
 ### Shortcodes
 
 The simplest way to get started is through WordPress shortcodes. The syntax is as easy as: `[wtp-petition id="123"]`.
 
-Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the ["Insert We The People Petition" button](js/tinymce/insert-petition.png) will open an overlay that will let you search the We The People petitions by title to find your issue.
+Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the !["Insert We The People Petition"](assets/img/insert-petition.png) button will open an overlay that will let you search the We The People petitions by title to find your issue. You may also limit your search results to open petitions.
 
 ### Widget
 
-To add a We The People petition to a WordPress dynamic sidebar go to Appearance > Widgets and drag a "WTP Petition" widget into the desired sidebar. Like the TinyMCE button the widget allows you to search for your desired petition by title.
+To add a We The People petition to a WordPress dynamic sidebar go to Appearance > Widgets and drag a "WTP Petition" widget into the desired sidebar. Like the TinyMCE button the widget allows you to search for your desired petition by title and show only open petitions.
 
-### `$we_the_people` global variable (advanced)
+### $GLOBALS['we-the-people'] global variable (advanced)
 
-If you're a developer and need more complete access to the We The People API you can use the `api()` method available through the `$we_the_people` global variable. The `api()` method accepts two arguments: the API method to call ('retrieve' or 'index' in version 1.0) and an array of arguments to pass to the API.
+If you're a developer and need more complete access to the We The People API you can use the `api()` method available through the `$GLOBALS['we-the-people']` global variable. The `api()` method accepts two arguments: the API method to call ('retrieve' or 'index' in version 1.*) and an array of arguments to pass to the API.
+
+**Note:** Before version 2.0, the plugin used a global `$we_the_people` variable. If you did customizations to We The People templates you'll want to be sure to update this reference.
 
 #### Examples
 
@@ -27,14 +40,14 @@ If you're a developer and need more complete access to the We The People API you
 
 ```php
 // equivalent to https://api.whitehouse.gov/v1/petitions/123abc.json
-$petition = $we_the_people->api( 'retrieve', array( 'id' => '123abc' ) );
+$petition = $GLOBALS['we-the-people']->api( 'retrieve', array( 'id' => '123abc' ) );
 ```
 
 ##### Searching for open petitions with "war" in the title
 
 ```php
 // equivalent to https://api.whitehouse.gov/v1/petitions.json?title=war&status=open
-$petition = $we_the_people->api( 'index', array( 'title' => 'war', 'status' => 'open' ) );
+$petition = $GLOBALS['we-the-people']->api( 'index', array( 'title' => 'war', 'status' => 'open' ) );
 ```
 
 Full API documentation is available [on the We The People API page](https://petitions.whitehouse.gov/developers).
@@ -79,7 +92,29 @@ If you're new to WordPress actions and/or filters it's highly recommended that y
 
 #### Filters
 
-##### `wethepeople_petition_body`
+##### wethepeople_load_scripts
+
+If this filter returns a boolean FALSE, the plugin will not load its custom JavaScript on the front-end.
+
+###### Example
+
+```php
+// Don't let We The People load its JavaScript files
+add_filter( 'wethepeople_load_scripts', '__return_false' );
+```
+
+##### wethepeople_load_styles
+
+Like it's JavaScript counterpart, `wethepeople_load_scripts`, a FALSE value from this filter will prevent We The People from loading it's stylesheet.
+
+###### Example
+
+```php
+// Don't let We The People load its stylesheet
+add_filter( 'wethepeople_load_styles', '__return_false' );
+```
+
+##### wethepeople_petition_body
 
 This filter is run on the actual body of the We The People petition before display.
 
@@ -100,11 +135,15 @@ function insert_preamble( $content ) {
 add_filter( 'wethepeople_petition_body', 'insert_preamble' );
 ```
 
-##### `wethepeople_shortcode_name`
+##### wethepeople_shortcode_name
 
-The plugin has intentionally avoided a `[petition]` shortcode in favor of `[wtp-shortcode]` to reduce the risk of conflicting with other `[petition]` shortcodes that may be registered in another plugin or theme. Returning a string at this filter will allow you to override the default shortcode name of `wtp-petition`.
+The plugin has intentionally avoided a `[petition]` shortcode in favor of `[wtp-petition]` to reduce the risk of conflicting with other `[petition]` shortcodes that may be registered in another plugin or theme. Returning a string at this filter will allow you to override the default shortcode name of `wtp-petition`.
 
-**Note:** This will not update existing post content - if you change the shortcode name and find yourself with a bunch of `[wtp-petition]` shortcodes appearing throughout the site these will need to be manually updated to match the new shortcode name. In extreme cases you may just want to double-register the shortcode ( `add_shortcode( 'my-petition-shortcode-name', array( 'WeThePeople_Plugin', 'petition_shortcode' ) );`) and forgo the `wethepeople_shortcode_name` filter.
+**Note:** This will not update existing post content - if you change the shortcode name and find yourself with a bunch of `[wtp-petition]` shortcodes appearing throughout the site these will need to be manually updated to match the new shortcode name. In extreme cases you may just want to double-register the shortcode and forgo the `wethepeople_shortcode_name` filter:
+
+```php
+add_shortcode( 'my-petition-shortcode-name', array( 'WeThePeople_Plugin', 'petition_shortcode' ) );
+```
 
 ###### Arguments
 
@@ -119,6 +158,7 @@ String (the desired shortcode name)
 ```php
 /**
  * Change the [wtp-petition] shortcode to something easier to remember like [petition]
+ *
  * @return str
  */
 function change_wtp_petition_shortcode_name() {
@@ -136,6 +176,7 @@ The We The People stylesheet and JavaScript file are enqueued in typical WordPre
 ```php
 /**
  * Prevent We The People from loading scripts and styles
+ *
  * @uses wp_dequeue_script()
  * @uses wp_dequeue_style()
  */
@@ -146,11 +187,37 @@ function mytheme_disable_wtp_scripts_styles() {
 add_action( 'init', 'mytheme_disable_wtp_scripts_styles' );
 ```
 
+Since version 2.0, there are also two filters that can also be used to disable the scripts/styles:
+
+```php
+add_filter( 'wethepeople_load_scripts', '__return_false' );
+add_filter( 'wethepeople_load_styles', '__return_false' );
+```
+
 ### Can visitors sign a petition using the plugin?
 
-At this time the We The People API is read-only, meaning your readers would need to visit https://petitions.whitehouse.gov in order to sign a petition. The White House plans to release a write API sometime in the near future at which point this plugin will be upgraded to enable this capability.
+Version 2.0 of the plugin uses the new Write API to enable you to collect signatures on We The People petitions. In order to activate this functionality, you'll need to [apply for a We The People API key](#) and add it to WordPress either through the plugin settings page (Settings > We The People) or in your wp-config.php file (see ["API Keys"](#api-keys) for more information).
+
+### I just upgraded and am getting errors about a $we_the_people variable being undefined
+
+Version 2.0 of the plugin replaced the global `$we_the_people` variable with the cleaner `$GLOBALS['we-the-people']`. You can safely replace instances of the former with the latter, though it's unnecessary to have a `global $GLOBALS['we-the-people']` declaration in your theme. If this change affects you, a simple (temporary) fix would be to add the following to your theme's functions.php file:
+
+```php
+// Alias $we_the_people to $GLOBALS['we-the-people']
+global $we_the_people;
+$we_the_people = $GLOBALS['we-the-people']
+```
 
 ## Changelog
+
+### Version 2.0
+
+* Leverage the new write API, enabling sites with a valid API key to sign petitions
+* **Breaking change:** Removed references to global `$we_the_people` variable, opting instead for `$GLOBALS['we-the-people']`
+* Better compatibility with WordPress 3.9+ and the TinyMCE changes it brought with it
+* Added ability to limit petition search results to open petitions
+* Added `wethepeople_load_scripts` and `wethepeople_load_styles` filters to easily stop We The People from loading assets in custom themes.
+* WTP will now load additional stylesheets to fix display issues with TwentyTwelve, TwentyThirteen, TwentyFourteen, and TwentyFifteen.
 
 ### Version 1.1
 
@@ -162,17 +229,17 @@ At this time the We The People API is read-only, meaning your readers would need
 
 ## Roadmap/To-do
 
-### Version 1.2
+### Version 2.1
 
-* Add CSS classes based on the topics related to a petition (`.topic-gun-control`, `.topic-taxes`, etc.) (#5)
 * Better petition searches on the back-end (#6)
 * Themes that can be applied if the user *doesn't* want the hands-off approach we're currently taking (#7)
+* Set cookies to track which petitions a user has signed so we can hide the signature forms
 
-### Version 2.0
+## Contribute
 
-* Once the write API becomes available make it easy for visitors to sign a petition
+If you'd like to contribute to the ongoing development of the We The People WordPress plugin, please feel free to fork the repository and issue pull requests for enhancements, bugfixes, etc. We'd also *really* like to get a good Spanish translation in place, so if you're able to help out, please see [the WordPress.org Translators Handbook](http://make.wordpress.org/polyglots/handbook/) for details on how to get started.
 
 ## Special Thanks
 
-* The White House for putting together the We The People API and inviting Buckeye Interactive to participate in the National Day of Civic Hacking.
+* The White House for putting together the We The People API and inviting Buckeye Interactive to participate in the National Day of Civic Hacking (two years in a row!).
 * [Tony Todoroff](http://www.georgetodoroff.com/) for the WordPress.org banners and TinyMCE icon.

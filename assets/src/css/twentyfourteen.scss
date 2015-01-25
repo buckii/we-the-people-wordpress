@@ -1,0 +1,23 @@
+/**
+ * Supplement styles to work with TwentyFourteen
+ *
+ * @package We The People
+ * @author Buckeye Interactive
+ */
+
+.wtp-petitions-signature {
+  .wtp-petition-signature-fields {
+    li {
+      margin-bottom: 24px;
+    }
+    label, input {
+      float: none;
+    }
+    label {
+      width: auto;
+    }
+    input {
+      width: 100%;
+    }
+  }
+}

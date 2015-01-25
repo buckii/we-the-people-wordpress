@@ -16,11 +16,13 @@ class We_The_People_Entity {
 
   /**
    * Instantiate the object and save the API response properties to properties of this class
+   *
    * @param object $api_response The API response to be cast as a We_The_People_Entity
    * @return void
+   *
    * @since 1.1
    */
-  public function __construct( $api_response=null ) {
+  public function __construct( $api_response = null ) {
 
     // Assign the methods from the StdClass object to this object
     if ( $api_response ) {
@@ -35,7 +37,9 @@ class We_The_People_Entity {
 
   /**
    * Catch empty properties
+   *
    * @return void
+   *
    * @since 1.1
    */
   public function __get( $prop ) {
@@ -44,22 +48,27 @@ class We_The_People_Entity {
 
   /**
    * Shortcut for `echo $obj->get_classes` *including* the class attribute name
+   *
    * @return void
+   *
    * @since 1.1
    */
-  public function petition_class( $additional='' ) {
+  public function petition_class( $additional = '' ) {
     printf( 'class="%s"', $this->get_classes( $additional, false ) );
   }
 
   /**
    * Get a list of classnames for this entity
-   * @param str $additional User-provided classnames to include
+   *
+   * @param str $additional User-provided classnames to include, separated by spaces
    * @param bool $array Should this be returned as an array or a string (true = array, false = string )
    * @return mixed (array|str) Dependent upon the $array argument
+   *
    * @uses sanitize_title_with_dashes()
+   *
    * @since 1.1
    */
-  public function get_classes( $additional='', $array=true ) {
+  public function get_classes( $additional = '', $array = true ) {
 
     // If we don't already have our system-defined CSS classes we'll need to generate them
     if ( ! $this->css_classes ) {
