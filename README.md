@@ -7,7 +7,7 @@ This plugin allows WordPress site owners to search and embed petitions from We T
 
 ## API keys
 
-Version 2.0 of the plugin introduced the ability to sign petitions via the We The People Write API. In order to enable this feature within the plugin, it's necessary to [acquire an API key from We The People](#), then enter in the We The People WordPress settings page (Settings > We The People). Alternatively, you may add the API key to your wp-config.php file by adding the following code above the "stop editing" comment:
+Version 2.0 of the plugin introduced the ability to sign petitions via the We The People Write API. In order to enable this feature within the plugin, it's necessary to [acquire an API key from We The People](http://www.whitehouse.gov/webform/apply-access-we-people-write-api), then enter in the We The People WordPress settings page (Settings > We The People). Alternatively, you may add the API key to your wp-config.php file by adding the following code above the "stop editing" comment:
 
 ```php
 // We The People API
@@ -22,7 +22,7 @@ define('WTP_API_KEY', 'your-api-key');
 
 The simplest way to get started is through WordPress shortcodes. The syntax is as easy as: `[wtp-petition id="123"]`.
 
-Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the ["Insert We The People Petition" button](js/tinymce/insert-petition.png) will open an overlay that will let you search the We The People petitions by title to find your issue. You may also limit your search results to open petitions.
+Petitions IDs aren't especially easy to uncover from the We The People site so the We The People plugin includes a TinyMCE button to help you. Clicking the !["Insert We The People Petition"](assets/img/insert-petition.png) button will open an overlay that will let you search the We The People petitions by title to find your issue. You may also limit your search results to open petitions.
 
 ### Widget
 
@@ -217,7 +217,7 @@ $we_the_people = $GLOBALS['we-the-people']
 * Better compatibility with WordPress 3.9+ and the TinyMCE changes it brought with it
 * Added ability to limit petition search results to open petitions
 * Added `wethepeople_load_scripts` and `wethepeople_load_styles` filters to easily stop We The People from loading assets in custom themes.
-* WTP will now load additional stylesheets to fix display issues with TwentyTwelve, TwentyThirteen, and TwentyFourteen.
+* WTP will now load additional stylesheets to fix display issues with TwentyTwelve, TwentyThirteen, TwentyFourteen, and TwentyFifteen.
 
 ### Version 1.1
 
