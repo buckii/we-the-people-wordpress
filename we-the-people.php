@@ -23,64 +23,58 @@ require_once dirname( __FILE__ ) . '/inc/wtp-entity.class.php';
 class WeThePeople_Plugin {
 
   /**
-   * The API endpoint (with trailing slash) for all API requests
+   * The API endpoint (with trailing slash) for all API requests.
    */
   const API_ENDPOINT = 'https://api.whitehouse.gov/v1/';
 
   /**
-   * The URL for API key registration
+   * The URL for API key registration.
    */
   const API_KEY_REGISTRATION_URL = 'http://www.whitehouse.gov/webform/apply-access-we-people-write-api';
 
   /**
-   * The current plugin version
+   * The current plugin version.
    */
   const PLUGIN_VERSION = '2.0';
 
   /**
-   * Codes to indicate success/errors with signature requests
+   * Codes to indicate success/errors with signature requests.
    */
   const SIGNATURE_STATUS_CODE_ERROR = 'err';
   const SIGNATURE_STATUS_CODE_SUCCESS = 'success';
 
   /**
-   * The query var used to indicate whether or not a signature was submitted successfully
+   * The query var used to indicate whether or not a signature was submitted successfully.
    */
   const SIGNATURE_STATUS_QUERY_VAR = 'wtp-signature-%s';
 
   /**
-   * The amount of time (in seconds) transient data should live before it's purged
+   * The amount of time (in seconds) transient data should live before it's purged.
    */
   const TRANSIENT_EXPIRES = MINUTE_IN_SECONDS;
 
   /**
-   * The amount of time (in seconds) the long-term transient should live before it's purged
+   * The amount of time (in seconds) the long-term transient should live before it's purged.
    */
   const TRANSIENT_LT_EXPIRES = DAY_IN_SECONDS;
 
   /**
-   * @var str $api_key The We The People API key
+   * @var string $api_key The We The People API key.
    */
   public $api_key;
 
   /**
-   * @var str $shortcode_name The name of the shortcode to register (defaults to 'wtp-petition')
+   * @var string $shortcode_name The name of the shortcode to register (defaults to 'wtp-petition').
    */
   public $shortcode_name;
 
   /**
-   * @var str $templates_path The system path to the plugins' templates/ directory
+   * @var string $templates_path The system path to the plugins' templates/ directory.
    */
   public $template_path;
 
   /**
-   * Class constructor
-   *
-   * @return void
-   *
-   * @uses add_action()
-   * @uses add_filter()
-   * @uses add_shortcode()
+   * Class constructor.
    *
    * @since 1.0
    */
@@ -113,9 +107,7 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Put the plugin URL in a global JS variable so it's available for our TinyMCE widget
-   *
-   * @uses plugins_url()
+   * Put the plugin URL in a global JS variable so it's available for our TinyMCE widget.
    *
    * @since 2.0
    */
@@ -124,11 +116,12 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Add the Petition button to TinyMCE
-   * This method should be called via the 'mce_buttons' (or 'mce_buttons_#') WordPress filter
+   * Add the Petition button to TinyMCE.
    *
-   * @param array $buttons The TinyMCE buttons
-   * @return array
+   * This method should be called via the 'mce_buttons' (or 'mce_buttons_#') WordPress filter.
+   *
+   * @param array $buttons The registered TinyMCE buttons.
+   * @return array The modified $buttons array.
    *
    * @since 1.0
    */
@@ -138,12 +131,13 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Make a call to the We The People API
-   * This method acts as a controller, farming out the work to more specialized API methods
+   * Make a call to the We The People API.
    *
-   * @param str $action The API method (retrieve|index) to call
-   * @param array $args Arguments to pass to the API call
-   * @return object
+   * This method acts as a controller, farming out the work to more specialized API methods.
+   *
+   * @param string $action The API method (retrieve|index) to call.
+   * @param array  $args   Arguments to pass to the API call.
+   * @return stdClass The response from the API method's call.
    *
    * @since 1.0
    */
@@ -156,7 +150,7 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Display a petition
+   * Display a petition.
    *
    * This plugin will detect the appropriate template file to load using the following priorities:
    * 1. wtp-petition-{id}.php (child theme)
@@ -165,11 +159,9 @@ class WeThePeople_Plugin {
    * 4. wtp-petition.php (parent theme)
    * 5. templates/wtp-petition.php (plugin)
    *
-   * @param object $petition An API response for a single petition
-   * @param array $data Additional data to pass to the template file
-   * @return mixed (str|void depending on $echo)
-   *
-   * @uses locate_template()
+   * @param object $petition An API response for a single petition.
+   * @param array  $data     Additional data to pass to the template file.
+   * @return mixed (str|void depending on $echo).
    *
    * @since 1.0
    */
@@ -220,11 +212,9 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Retrieve the We The People API key
+   * Retrieve the We The People API key.
    *
-   * @return str
-   *
-   * @uses wethepeople_get_option()
+   * @return string The API key.
    *
    * @since 2.0
    */
@@ -240,13 +230,11 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Handler for the [wtp-petition] shortcode
+   * Handler for the [wtp-petition] shortcode.
    *
-   * @param array $atts Attributes passed in the shortcode call
-   * @param str $content Content to be added above the petition information
-   * @return str
-   *
-   * @uses shortcode_atts()
+   * @param array  $atts    Attributes passed in the shortcode call.
+   * @param string $content Content to be added above the petition information.
+   * @return string The [wtp-petition] shortcode.
    *
    * @since 1.0
    */
@@ -272,13 +260,12 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Register our TinyMCE plugin
-   * This should be called via the 'mce_external_plugins' filter
+   * Register our TinyMCE plugin.
    *
-   * @param array $plugins Plugins registered within TinyMCE
-   * @return array
+   * This should be called via the 'mce_external_plugins' filter.
    *
-   * @uses plugins_url()
+   * @param array $plugins Plugins registered within TinyMCE.
+   * @return array Registered plugins, including "wethepeople".
    *
    * @since 1.0
    */
@@ -288,7 +275,7 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Sign a petition through the WTP API
+   * Sign a petition through the WTP API.
    *
    * @since 2.0
    */
@@ -366,9 +353,7 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Ajax handler for a petition search
-   *
-   * @return void
+   * Ajax handler for a petition search.
    *
    * @since 1.0
    */
@@ -423,11 +408,12 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Handle requests for the API index action
-   * Documentation for the API can be found at: https://petitions.whitehouse.gov/developers
+   * Handle requests for the API index action.
    *
-   * @param array $args Arguments to pass to the API call
-   * @return object
+   * Documentation for the API can be found at: https://petitions.whitehouse.gov/developers.
+   *
+   * @param array $args Arguments to pass to the API call.
+   * @return object The response from make_api_call().
    *
    * @since 1.0
    */
@@ -436,11 +422,12 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Handle requests for the API retrieve action
-   * Currently the only argument retrieve takes is an ID so $args['id'] should always be set
+   * Handle requests for the API retrieve action.
    *
-   * @param array $args Arguments to pass to the API call
-   * @return We_The_People_Entity object
+   * Currently the only argument retrieve takes is an ID so $args['id'] should always be set.
+   *
+   * @param array $args Arguments to pass to the API call.
+   * @return We_The_People_Entity object.
    *
    * @since 1.0
    */
@@ -451,10 +438,10 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Log an error
+   * Log an error.
    *
-   * @param str $message The error message to log
-   * @return bool
+   * @param string $message The error message to log.
+   * @return bool.
    *
    * @since 1.0
    */
@@ -463,21 +450,17 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Make the actual call to the API endpoint and return the results as a PHP object
+   * Make the actual call to the API endpoint and return the results as a PHP object.
    *
-   * This method uses the WordPress Transient API to save API responses for TRANSIENT_EXPIRES in the database.
-   * During development the API was somewhat flaky. In order to prevent an error we're also keeping a long-term
-   * transient in the database with a higher expiration time (TRANSIENT_LT_EXPIRES). It's probably better to have
-   * data that's up to 1hr out-of-date rather than nothing at all.
+   * This method uses the WordPress Transient API to save API responses for TRANSIENT_EXPIRES in
+   * the database.
    *
-   * @param str $call The assembled API call
-   * @return object
+   * During development the API was somewhat flaky. In order to prevent an error we're also keeping
+   * a long-term transient in the database with a higher expiration time (TRANSIENT_LT_EXPIRES).
+   * It's probably better to have data that's up to 1hr out-of-date rather than nothing at all.
    *
-   * @uses get_transient()
-   * @uses is_wp_error()
-   * @uses set_transient()
-   * @uses trailingslashit()
-   * @uses wp_remote_get()
+   * @param string $call The assembled API call.
+   * @return object The API response.
    *
    * @since 1.0
    */
@@ -529,16 +512,9 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Register plugin JavaScript
+   * Register plugin JavaScript.
    *
    * @global $pagenow
-   * @return void
-   *
-   * @uses is_admin()
-   * @uses plugins_url()
-   * @uses wp_enqueue_script()
-   * @uses wp_localize_script()
-   * @uses wp_register_script()
    *
    * @since 1.0
    */
@@ -570,15 +546,11 @@ class WeThePeople_Plugin {
   }
 
   /**
-   * Register plugin styles
+   * Register plugin styles.
+   *
+   * If a CSS file that matches the theme name exists in assets/dist/css, it will automatically be loaded.
    *
    * @global $pagenow
-   * @return void
-   *
-   * @uses is_admin()
-   * @uses plugins_url()
-   * @uses wp_enqueue_style()
-   * @uses wp_register_style()
    *
    * @since 1.0
    */
@@ -608,16 +580,10 @@ class WeThePeople_Plugin {
 /**
  * Create an instance of WeThePeople_Plugin and store it in the globals $GLOBALS['we-the-people']
  *
- * @return bool
- *
- * @uses load_plugin_textdomain()
- * @uses plugin_basename()
- *
  * @since 1.0
  */
 function wethepeople_init() {
   $GLOBALS['we-the-people'] = new WeThePeople_Plugin;
   load_plugin_textdomain( 'we-the-people', null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-  return true;
 }
 add_action( 'init', 'wethepeople_init' );
