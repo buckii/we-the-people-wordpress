@@ -25,12 +25,12 @@ class WeThePeople_Plugin {
   /**
    * The API endpoint (with trailing slash) for all API requests
    */
-  const API_ENDPOINT = 'http://11111011100.api.whitehouse.gov/v1/';
+  const API_ENDPOINT = 'https://api.whitehouse.gov/v1/';
 
   /**
    * The URL for API key registration
    */
-  const API_KEY_REGISTRATION_URL = '#';
+  const API_KEY_REGISTRATION_URL = 'http://www.whitehouse.gov/webform/apply-access-we-people-write-api';
 
   /**
    * The current plugin version
